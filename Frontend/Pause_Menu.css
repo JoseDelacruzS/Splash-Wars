@@ -1,0 +1,64 @@
+body{
+    
+    background-image: url("2.jpg");
+    background-size: cover;
+    background-position:top;
+    background-repeat: no-repeat;
+    
+
+}
+
+#menu {
+    text-align: center;
+    padding-top: 370px;
+}
+
+button {
+    font-family: 'MiFuentePersonalizada', sans-serif;
+    border: none; 
+    border-radius: 90px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 300;
+    margin: 4px 2px;
+    cursor: pointer;
+    height: 45px;
+    width: 200px;
+    background-color: #02abb0;
+    color: #ffffff;
+
+}
+
+#prueba {
+    background: radial-gradient(circle at center, #a3e1ff, #02abb0, #02abb0);
+}
+
+#btn-Reanudar:hover {
+    background-color: #02abb0;
+    color: #fcdd43;
+    height: 50px;
+    width: 205px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
+  
+}
+#btn-Opciones:hover {
+    background-color: #02abb0;
+    color: #fcdd43;
+    height: 50px;
+    width: 205px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
+}
+#btn-Salir:hover {
+    background-color: #02abb0;
+    color: #fcdd43;
+    height: 50px;
+    width: 205px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
+}
+
+@font-face {
+    font-family: 'MiFuentePersonalizada';
+    src: url('Watermelon.ttf') format('truetype');
+}
