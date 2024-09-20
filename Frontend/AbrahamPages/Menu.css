@@ -10,13 +10,13 @@ body{
 @font-face{
 
     font-family: 'WatermeloDays';
-    src: url(/Frontend/CSSSetignMenu/Fuentes/Watermelon\ Days.ttf);
+    src: url(/Frontend/recursos/Fuentes/Watermelon\ Days.ttf);
 }
 
 @font-face{
 
     font-family: 'Watermelo';
-    src: url(/Frontend/CSSSetignMenu/Fuentes/Watermelon.ttf);
+    src: url(/Frontend/recursos/Fuentes/Watermelon.ttf);
 }
 
 .buton{
