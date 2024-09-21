@@ -8,15 +8,14 @@ body{
 }
 
 @font-face{
-
-    font-family: 'WatermeloDays';
-    src: url(/Frontend/CSSSetignMenu/Fuentes/Watermelon\ Days.ttf);
+    font-family: 'Watermelon Days';
+    src: url('../recursos/Fuentes/Watermelon Days.ttf') format('truetype');
 }
 
 @font-face{
 
     font-family: 'Watermelo';
-    src: url(/Frontend/CSSSetignMenu/Fuentes/Watermelon.ttf);
+    src: url('../recursos/Fuentes/Watermelon.ttf') format('truetype')
 }
 
 .buton{

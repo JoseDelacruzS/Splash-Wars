@@ -1,20 +1,18 @@
 body{
-    overflow: hidden2;
+    overflow: hidden;
 }
 
-
-
 @font-face{
-
-    font-family: 'WatermeloDays';
-    src: url(/Frontend/CSSSetignMenu/Fuentes/Watermelon\ Days.ttf);
+    font-family: 'Watermelon Days';
+    src: url('../recursos/Fuentes/Watermelon Days.ttf') format('truetype');
 }
 
 @font-face{
 
     font-family: 'Watermelo';
-    src: url(/Frontend/CSSSetignMenu/Fuentes/Watermelon.ttf);
+    src: url('../recursos/Fuentes/Watermelon.ttf') format('truetype')
 }
+
 
 .buton{
     font-family: 'Watermelo';
@@ -64,7 +62,7 @@ body{
 }
 
 .WatermelonDay{
-    font-family: 'WatermeloDays';
+    font-family: 'Watermelon Days';
 }
 
 #imagenAg2ua1{
