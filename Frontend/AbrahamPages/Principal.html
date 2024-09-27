@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="Principal.css">
+</head>
+<body class="relative">
+
+    <img src="../recursos/Imagenes/7.png" 
+    class="bg-cover absolute  blur-sm" alt="">
+    
+    <div class="grid grid-cols-7 w-full mt-20 absolute">
+      <div class="">
+
+      </div>
+      <div class="col-span-5">
+
+        <div class="flex space-x-2">
+            <button class="amarillo p-1 px-5 text-3xl font-bold
+             text-white WatermelonDay tracking-widest rounded-t-3xl
+             ">Jugar</button>
+             <button class="buton Azul1 hover:text-blue-500 p-1 px-5 text-3xl font-bold
+             text-white WatermelonDay tracking-widest rounded-t-3xl
+             ">Opciones</button>
+             <button class="buton Azul1 hover:text-blue-500 p-1 px-5 text-3xl font-bold
+             text-white WatermelonDay tracking-widest rounded-t-3xl
+             ">Perfil</button>
+        </div>
+
+        <div id="Jugar" class="h-96 hidden amarillo grid grid-cols-3 rounded-r-2xl rounded-bl-lg">
+            <div class="col-span-2 m-2">
+                <label for="" class="WatermelonDay text-3xl 
+                flex justify-center text-white tracking-wider">Seleccionar Mapa</label>
+
+                <div class="flex justify-center my-4">
+                    <img src="https://i.kinja-img.com/image/upload/c_fit,q_60,w_645/4f5a4bed0edd41daeec37b926e82904d.jpg"
+                     alt="" class="w-96 rounded-lg">
+                </div>
+
+                <div class="flex space-x-4 justify-center items-center">
+                    <button>
+                        <img src="https://cdn-icons-png.flaticon.com/512/157/157910.png"
+                        alt="" class="size-10">
+                    </button>
+                    <label for="" class="text-3xl WatermelonDay">Water Town</label>
+                    <button>
+                        <img src="https://cdn-icons-png.flaticon.com/512/157/157910.png"
+                        alt="" class="size-10 scale-x-[-1]">
+                    </button>
+
+                </div>
+
+            </div>
+            <div class="bg-yellow-300 rounded-r-2xl">
+                <label for="" class="flex justify-center text-white
+                 WatermelonDay bg-yellow-500 text-3xl rounded-tr-2xl">Opciones de juego</label>
+                <div class="my-4 mx-2">
+
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="" class="text-xl WatermelonDay tracking-wider p-2">Modo de juego: </label>
+
+                            </td>
+                            <td>
+                                <select name="" class="rounded-lg WatermelonDay tracking-wider text-xl" id="">
+                                 <option value="">Duelo por equipos</option>
+                                 <option value="">Sobrevive</option>
+                                </select>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="" class="text-xl WatermelonDay tracking-wider p-2">Dificultad: </label>
+
+                            </td>
+                            <td>
+
+                                <select name="" class="rounded-lg WatermelonDay tracking-wider text-xl" id="">
+                                 <option value="">Facil</option>
+                                 <option value="">Normal</option>
+                                 <option value="">Dificil</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="" class="text-xl WatermelonDay tracking-wider p-2">Habilitar IA: </label>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="size-5" name="" id="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="" class="text-xl WatermelonDay tracking-wider p-2">Habilitar Poderes: </label>
+                            </td>
+                            <td>
+
+                                <input type="checkbox" class="size-5" name="" id="">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="justify-center flex mt-36">
+
+                        <button class="bg-amber-500 hover:bg-amber-400 hover:text-amber-900  p-2 text-white 
+                         rounded-full WatermelonDay tracking-wider text-3xl">Empezar partida</button>
+                    </div>
+              
+
+                </div>
+                
+            </div>
+            
+
+        </div>
+
+        <div id="Opciones" class="h-96 amarillo grid grid-cols-3 rounded-r-2xl rounded-bl-lg">
+
+        </div>
+
+        
+      </div>
+
+      <div class="">
+
+      </div>
+
+    </div>
+
+
+
+
+
+       
+  
+    
+
+
+    <div class="relative hidden">
+
+        <img id="imagenMenu"
+         src="CSSSetignMenu/Estilos, colores, imagenes/Imagenes/2.png" 
+         class="inset-y-0 absolute blur-sm" alt="">
+
+
+        <img id="imageTitle" src="CSSSetignMenu/Estilos, colores, imagenes/Titulo.png"
+        class="absolute w-96 top-20" alt="">
+    </div>
+
+    
+</body>
+</html>
