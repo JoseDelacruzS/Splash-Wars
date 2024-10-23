@@ -54,7 +54,7 @@ export class Map {
     loadStage() {
         const loader = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         loader.load(
-            './assets/models/scenarios/map2/mapa1.glb', // Cambia esto a la ruta de tu modelo
+            './assets/models/scenarios/map2/IslaInicial/IslaInicial.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -73,13 +73,13 @@ export class Map {
 
         const loader2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         loader2.load(
-            './assets/models/scenarios/map2/mapa1.glb', // Cambia esto a la ruta de tu modelo
+            './assets/models/scenarios/map2/IslaInicial/IslaInicial.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
                 stage.rotation.y = 3.1416;
                 stage.scale.set(2, 2, 2);
-                stage.position.set(0, 0, -200); 
+                stage.position.set(0, 0, -150); 
                 this.scene.add(stage); // Agrega el escenario a la escena
             },
             (xhr) => {
@@ -89,6 +89,347 @@ export class Map {
                 console.error('An error happened', error); // Manejo de errores
             }
         );
+
+
+        const islaPequ1 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        islaPequ1.load(
+            './assets/models/scenarios/map2/IslaPequeña1/IslaPequeña1.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = 4.7;
+                stage.scale.set(2, 2, 2);
+                stage.position.set(60, 0, -80); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+        const islaPequ1_2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        islaPequ1_2.load(
+            './assets/models/scenarios/map2/IslaPequeña1/IslaPequeña1.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = 1.57;
+                stage.scale.set(2, 2, 2);
+                stage.position.set(-60, 0, -80); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+        const islaPequ2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        islaPequ2.load(
+            './assets/models/scenarios/map2/IslaPequña2/IslaPequeña2.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = 3.1416;
+                stage.scale.set(2, 2, 2);
+                stage.position.set(60, 0, -30); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+        const islaPequ2_2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        islaPequ2_2.load(
+            './assets/models/scenarios/map2/IslaPequña2/IslaPequeña2.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = 3.1416;
+                stage.scale.set(2, 2, 2);
+                stage.position.set(-60, 0, -120); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+
+        const islaGrande = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        islaGrande.load(
+            './assets/models/scenarios/map2/IslaGrande/IslaGrande.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+               
+                stage.scale.set(2, 2, 2);
+                stage.position.set(100, 0, -140); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+        const islaGrande_2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        islaGrande_2.load(
+            './assets/models/scenarios/map2/IslaGrande/IslaGrande.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = 3.1416
+                stage.scale.set(2, 2, 2);
+                stage.position.set(-100, 0, -10); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+        const islaBandera = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        islaBandera.load(
+            './assets/models/scenarios/map2/IslaBandera/IslaBandera.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+               
+                stage.scale.set(3, 3, 3);
+                stage.position.set(0, 0, -75); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+        /// Esta es la parte de los puentes que conectan con las isltas
+
+        const puente1 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente1.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = 1;
+                stage.scale.set(3, 3, 6);
+                stage.position.set(-60, 0, 30); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+        const puente1_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente1_R.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = 1;
+                stage.scale.set(3, 3, 6);
+                stage.position.set(70, 0, -170); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+
+        const puente2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente2.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = -1.0;
+                stage.scale.set(3, 3, 5);
+                stage.position.set(-50, 0, -35); 
+                this.scene.add(stage); // Agrga el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+        const puente2_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente2_R.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = -1.0;
+                stage.scale.set(3, 3, 6);
+                stage.position.set(50, 0, -115); 
+                this.scene.add(stage); // Agrga el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+
+        const puente3 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente3.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = - 0.6;
+                stage.scale.set(3, 3, 5);
+                stage.position.set(-80, 0, -50); 
+                this.scene.add(stage); // Agrga el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+        const puente3_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente3_R.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y = - 0.7;
+                stage.scale.set(3, 3, 5);
+                stage.position.set(80, 0, -100); 
+                this.scene.add(stage); // Agrga el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+        const puente5 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente5.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y =  0.1;
+                stage.scale.set(3, 3, 3);
+                stage.position.set(-60, 0, -100); 
+                this.scene.add(stage); // Agrga el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+
+        const puente5_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente5_R.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y =  0.1;
+                stage.scale.set(3, 3, 4);
+                stage.position.set(60, 0, -50); 
+                this.scene.add(stage); // Agrga el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+        const puente6 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente6.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y =  -1.0;
+                stage.scale.set(3, 3, 5);
+                stage.position.set(-40, 0, -134); 
+                this.scene.add(stage); // Agrga el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+        const puente6_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        puente6_R.load(
+            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.rotation.y =  -1.0;
+                stage.scale.set(3, 3, 5);
+                stage.position.set(40, 0, -16); 
+                this.scene.add(stage); // Agrga el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
+
+      
+
     }
 
     update() {

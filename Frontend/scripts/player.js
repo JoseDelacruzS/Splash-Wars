@@ -8,7 +8,7 @@ export class Player {
         this.camera = camera;
         this.model = null;
         this.velocity = new THREE.Vector3();
-        this.moveSpeed = 7;
+        this.moveSpeed = 20;
 
         //Camara
         this.cameraOffset = new THREE.Vector3(0, 5.5, -3);
