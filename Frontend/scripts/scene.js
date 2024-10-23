@@ -10,6 +10,7 @@ export default class GameScene {
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.clock = new THREE.Clock();
         this.player = null;
+        this.player2 = null;
         this.hud = new HUD();
         this.map = null;
 
@@ -54,13 +55,19 @@ export default class GameScene {
     }
 
     loadPlayer() {
-        this.player = new Player(this.scene, this.camera);
+        this.player = new Player(this.scene, this.camera, 0, 1, 0,false);
+        this.player2 = new Player(this.scene, this.camera, 2, 1, 0,true);
+
+
     }
 
     update() {
         const deltaTime = this.clock.getDelta();
         if (this.player) {
             this.player.update(deltaTime);
+        }
+        if (this.player2) {
+            this.player2.update(deltaTime);
         }
         if (this.map) {
             this.map.update();
