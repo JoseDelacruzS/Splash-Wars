@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { HUD } from './hud.js';
-import { Map } from './map1.js';
+import { Map } from './map2Abe.js';
 import { Player } from './player.js';
 
 export default class GameScene {
