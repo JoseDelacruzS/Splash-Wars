@@ -71,6 +71,7 @@ export class Map {
         );
 
 
+
         const loader2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         loader2.load(
             './assets/models/scenarios/map2/IslaInicial/IslaInicial.glb', // Cambia esto a la ruta de tu modelo
@@ -428,7 +429,24 @@ export class Map {
             }
         );
 
-      
+        //items
+        const bombalodo = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
+        bombalodo.load(
+            './assets/models/itemsAbraham/bombabarro.glb', // Cambia esto a la ruta de tu modelo
+            (gltf) => {
+                console.log('Modelo cargado con exito', gltf)
+                const stage = gltf.scene; 
+                stage.scale.set(1, 1, 1);
+                stage.position.set(0, 2, 0); 
+                this.scene.add(stage); // Agrega el escenario a la escena
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded'); // Progreso de carga
+            },
+            (error) => {
+                console.error('An error happened', error); // Manejo de errores
+            }
+        );
 
     }
 
