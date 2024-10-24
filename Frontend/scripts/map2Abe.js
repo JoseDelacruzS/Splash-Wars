@@ -21,7 +21,7 @@ export class Map {
 
     addSkydome() {
         const skydomeGeometry = new THREE.SphereGeometry(500, 60, 40);
-        const skyTexture = new THREE.TextureLoader().load('./assets/images/cielo2map2.png');
+        const skyTexture = new THREE.TextureLoader().load('../assets/images/cielo2map2.png');
         const skydomeMaterial = new THREE.MeshBasicMaterial({
             map: skyTexture,
             side: THREE.BackSide
@@ -43,7 +43,7 @@ export class Map {
 
     setupAudio() {
         const audioLoader = new THREE.AudioLoader();
-        audioLoader.load('./assets/audio/backgroundMusic.mp3', (buffer) => {
+        audioLoader.load('../assets/audio/backgroundMusic.mp3', (buffer) => {
             this.backgroundMusic.setBuffer(buffer);
             this.backgroundMusic.setLoop(true);
             this.backgroundMusic.setVolume(0.5);
@@ -54,7 +54,7 @@ export class Map {
     loadStage() {
         const loader = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         loader.load(
-            './assets/models/scenarios/map2/IslaInicial/IslaInicial.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaInicial/IslaInicial.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -74,7 +74,7 @@ export class Map {
 
         const loader2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         loader2.load(
-            './assets/models/scenarios/map2/IslaInicial/IslaInicial.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaInicial/IslaInicial.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -94,7 +94,7 @@ export class Map {
 
         const islaPequ1 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         islaPequ1.load(
-            './assets/models/scenarios/map2/IslaPequeña1/IslaPequeña1.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaPequeña1/IslaPequeña1.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -114,7 +114,7 @@ export class Map {
 
         const islaPequ1_2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         islaPequ1_2.load(
-            './assets/models/scenarios/map2/IslaPequeña1/IslaPequeña1.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaPequeña1/IslaPequeña1.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -133,7 +133,7 @@ export class Map {
 
         const islaPequ2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         islaPequ2.load(
-            './assets/models/scenarios/map2/IslaPequña2/IslaPequeña2.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaPequña2/IslaPequeña2.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -153,7 +153,7 @@ export class Map {
 
         const islaPequ2_2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         islaPequ2_2.load(
-            './assets/models/scenarios/map2/IslaPequña2/IslaPequeña2.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaPequña2/IslaPequeña2.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -174,7 +174,7 @@ export class Map {
 
         const islaGrande = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         islaGrande.load(
-            './assets/models/scenarios/map2/IslaGrande/IslaGrande.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaGrande/IslaGrande.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -193,7 +193,7 @@ export class Map {
 
         const islaGrande_2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         islaGrande_2.load(
-            './assets/models/scenarios/map2/IslaGrande/IslaGrande.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaGrande/IslaGrande.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -213,7 +213,7 @@ export class Map {
 
         const islaBandera = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         islaBandera.load(
-            './assets/models/scenarios/map2/IslaBandera/IslaBandera.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/IslaBandera/IslaBandera.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -234,7 +234,7 @@ export class Map {
 
         const puente1 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente1.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -254,7 +254,7 @@ export class Map {
 
         const puente1_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente1_R.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -275,7 +275,7 @@ export class Map {
 
         const puente2 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente2.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -294,7 +294,7 @@ export class Map {
 
         const puente2_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente2_R.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -315,7 +315,7 @@ export class Map {
 
         const puente3 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente3.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -334,7 +334,7 @@ export class Map {
 
         const puente3_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente3_R.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -374,7 +374,7 @@ export class Map {
 
         const puente5_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente5_R.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -393,7 +393,7 @@ export class Map {
 
         const puente6 = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente6.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -412,7 +412,7 @@ export class Map {
 
         const puente6_R = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         puente6_R.load(
-            './assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/map2/Puente/puente.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
@@ -432,7 +432,7 @@ export class Map {
         //items
         const bombalodo = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         bombalodo.load(
-            './assets/models/itemsAbraham/bombabarro.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/itemsAbraham/bombabarro.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene; 
