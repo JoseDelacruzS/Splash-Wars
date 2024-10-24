@@ -1,0 +1,123 @@
+<html>
+
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    </link>
+    <style>
+        @font-face {
+            font-family: 'Watermelon';
+            src: url('../Frontend/assets/Fuentes/Watermelon.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'Watermelon Days';
+            src: url('../Frontend/assets/Fuentes/Watermelon Days.ttf') format('truetype');
+        }
+
+        body {
+            padding-top:150px;
+            font-family: 'Watermelon Days', sans-serif;
+            background: url('/Frontend/assets/images/Menu/Opciones.png') no-repeat center center fixed;
+        }
+
+        .subtitle {
+            font-family: 'Watermelon', sans-serif;
+            font-size: 4.5rem;
+            color: white;
+        }
+
+        .settings-container {
+            background-color: #fcdd43;
+            border-radius: 2rem;
+            padding: 3.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 6px solid #fdcb02;
+            -webkit-text-stroke: 1px #fdcb02;
+            width: 900px;
+            max-width: 1000px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .slider-label {
+            font-size: 3rem;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .slider {
+            width: 60%;
+        }
+
+        .button {
+            font-size: 2.5rem;
+            padding: 1rem 5rem;
+            border-radius: 2rem;
+            margin: 0 3rem;
+            color: white;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .accept-button {
+            background-color: #7ab858;
+        }
+
+        .accept-button:hover {
+            background-color: #5e945b;
+            transform: scale(1.1);
+        }
+
+        .accept-button:active {
+            transform: scale(1.2);
+        }
+
+        .back-button {
+            background-color: #ff5757;
+        }
+
+        .back-button:hover {
+            background-color: #e64c4c;
+            transform: scale(1.1);
+        }
+
+        .back-button:active {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center h-screen">
+    <div class="text-center">
+        <div class="subtitle">AJUSTES</div>
+        <div class="settings-container mt-8">
+            <div class="slider-container">
+                <div class="slider-label">VOLUMEN GENERAL</div>
+                <input type="range" class="slider" min="0" max="100" value="50">
+            </div>
+            <div class="slider-container">
+                <div class="slider-label">MUSICA</div>
+                <input type="range" class="slider" min="0" max="100" value="50">
+            </div>
+            <div class="slider-container">
+                <div class="slider-label">EFECTOS</div>
+                <input type="range" class="slider" min="0" max="100" value="50">
+            </div>
+        </div>
+        <div class="mt-40">
+            <button class="button accept-button">
+                <a href="/Frontend/Index.html">ACEPTAR</a>
+            </button>
+            <button class="button back-button">
+                <a href="/Frontend/Index.html">REGRESAR</a>
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>

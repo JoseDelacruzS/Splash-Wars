@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splash Wars</title>
+    <link rel="stylesheet" href="./HUD/HUD.css">
+    <script type="importmap">
+        {
+            "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.0/examples/jsm/"
+            }
+        }
+        </script>
+
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div id="hud">
+        <div id="life-container">
+            <img src="../assets/images/Corazon.png" alt="Vida" id="heart-icon">
+            <span id="life-value">100</span>
+        </div>
+
+        <div id="timer">
+            <span id="time-value">2:00</span>
+        </div>
+
+        <div id="ammo-abilities-container">
+            <div id="abilities">
+                <div class="ability">
+                    <img src="../assets/images/Lodo.png" alt="Habilidad 1" class="ability-icon">
+                    <span class="ability-key">1</span>
+                </div>
+                <div class="ability">
+                    <img src="../assets/images/Globos.png" alt="Habilidad 2" class="ability-icon">
+                    <span class="ability-key">2</span>
+                </div>
+                <div class="ability">
+                    <img src="../assets/images/Hueso.png" alt="Habilidad 3" class="ability-icon">
+                    <span class="ability-key">3</span>
+                </div>
+            </div>
+
+            <div id="ammo-card">
+                <div id="ammo-splash">
+                    <span id="ammo-count">15</span>
+                </div>
+                <img src="../assets/images/Pistola_agua.png" alt="Arma" id="water-gun-icon">
+            </div>
+        </div>
+
+        <div id="crosshair">
+            <img src="../assets/images/Mira.png" alt="Mira">
+        </div>
+    </div>
+
+    <script type="module" src="../scripts/main.js"></script>
+</body>
+</html>

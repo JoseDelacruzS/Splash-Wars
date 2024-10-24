@@ -1,0 +1,114 @@
+<html>
+
+<head>
+    <title>Splash Wars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        @font-face {
+            font-family: 'Watermelon';
+            src: url('../Frontend/assets/Fuentes/Watermelon.ttf') format('truetype');
+        }
+
+        body {
+            font-family: 'Watermelon', sans-serif;
+        }
+
+        .hover-grow:hover {
+            transform: scale(1.6);
+            border-color: #50ffff;
+        }
+
+        .hover-grow-text:hover {
+            transform: scale(1.6);
+            color: white;
+            -webkit-text-stroke: 1px #50ffff;
+        }
+
+        .text-stroke {
+            -webkit-text-stroke: 2.3px #fdcb02;
+        }
+
+        /* Clase personalizable para el desplazamiento */
+        .custom-padding {
+            padding-left: 40rem;
+            /* Ajusta este valor para personalizar el desplazamiento */
+        }
+
+        .accept-button {
+            background-color: #7ab858;
+        }
+
+        .accept-button:hover {
+            background-color: #51e749;
+            transform: scale(1.2);
+        }
+
+        .accept-button:active {
+            transform: scale(1.4);
+        }
+    </style>
+</head>
+
+<body class="bg-cover bg-center h-screen" style="background-image: url('/Frontend/assets/images/Menu/Modo.png');">
+    <div class="flex items-center justify-center h-full custom-padding">
+        <div id="threejs-model" class="h-96 w-52">
+            <!-- Three.js model will be rendered here -->
+        </div>
+
+        <div class="ml-8 flex flex-col items-center">
+            <div class="text-white text-7xl mb-8 text-stroke">
+                ESCOGE MAPA
+            </div>
+
+            <div class="flex space-x-8 mb-12">
+                <!-- Simplified map selection divs -->
+                <div
+                    class="w-40 h-40 bg-white border-4 border-yellow-400 rounded-3xl hover-grow transition-transform duration-200">
+                </div>
+                <div
+                    class="w-40 h-40 bg-white border-4 border-yellow-400 rounded-3xl hover-grow transition-transform duration-200">
+                </div>
+                <div
+                    class="w-40 h-40 bg-white border-4 border-yellow-400 rounded-3xl hover-grow transition-transform duration-200">
+                </div>
+            </div>
+
+            <div class="text-white text-7xl mb-8 text-stroke">
+                MODO DE JUEGO
+            </div>
+
+            <div class="flex space-x-8 mb-12">
+                <div class="text-white text-6xl hover-grow-text transition-transform duration-200 text-stroke">
+                    FFA
+                </div>
+                <div class="text-white text-6xl hover-grow-text transition-transform duration-200 text-stroke">
+                    CTF
+                </div>
+            </div>
+
+            <button class="bg-green-500 text-white text-5xl py-4 px-12 rounded-full shadow-lg accept-button transition-transform duration-200 ">
+            <a href="/Frontend/htmls/Game.html">JUGAR</a>
+            </button>
+        </div>
+    </div>
+</body>
+<script>
+    import * as THREE from 'three';
+    import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+    import { PlayerAnimations } from './playerAnimations.js';
+
+
+    const loaderSTL = new STLLoader();
+    loaderSTL.load("deadMouse.stl", function (model) {
+        console.log(model);
+        const material = new THREE.MeshPhongMaterial({ color: "red" });
+        const mesh = new THREE.Mesh(model, material);
+        mesh.rotateX(-Math.PI / 2);
+        mesh.scale.set(0.03, 0.03, 0.03);
+        scene.add(mesh);
+    });
+
+</script>
+
+</html>

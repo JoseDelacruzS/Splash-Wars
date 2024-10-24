@@ -1,62 +1,65 @@
-<!DOCTYPE html>
-<html lang="es">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Splash Wars</title>
-    <link rel="stylesheet" href="htmls/HUD/HUD.css">
-    <script type="importmap">
-        {
-            "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.0/examples/jsm/"
-            }
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @font-face {
+            font-family: 'Watermelon';
+            src: url('../Frontend/assets/Fuentes/Watermelon.ttf') format('truetype');
         }
-        </script>
 
+        body {
+            font-family: 'Watermelon', sans-serif;
+        }
+
+        .menu-item {
+            transition: all 0.2s ease;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.5);
+            -webkit-text-stroke: 5px #fdcb02;
+        }
+
+        .menu-item:active {
+            transform: scale(2.5);
+            -webkit-text-stroke: 5px #50ffff;
+        }
+
+        .grande {
+            font-size: 100px;
+            margin-right: 330px;
+        }
+
+        .menu-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-item a:hover {
+            -webkit-text-stroke: 5px #fdcb02;
+        }
+
+        .menu-item a:active {
+            -webkit-text-stroke: 5px #50ffff;
+        }
+    </style>
 </head>
-<body>
-    <canvas id="canvas"></canvas>
-    
-    <div id="hud">
-        <div id="life-container">
-            <img src="../Frontend/assets/images/Corazon.png" alt="Vida" id="heart-icon">
-            <span id="life-value">100</span>
-        </div>
 
-        <div id="timer">
-            <span id="time-value">2:00</span>
-        </div>
-
-        <div id="ammo-abilities-container">
-            <div id="abilities">
-                <div class="ability">
-                    <img src="../Frontend/assets/images/Lodo.png" alt="Habilidad 1" class="ability-icon">
-                    <span class="ability-key">1</span>
-                </div>
-                <div class="ability">
-                    <img src="../Frontend/assets/images/Globos.png" alt="Habilidad 2" class="ability-icon">
-                    <span class="ability-key">2</span>
-                </div>
-                <div class="ability">
-                    <img src="../Frontend/assets/images/Hueso.png" alt="Habilidad 3" class="ability-icon">
-                    <span class="ability-key">3</span>
-                </div>
+<body class="bg-cover bg-center h-screen" style="background-image: url('/Frontend/assets/images/Menu/Menu.png');">
+    <div class="flex flex-col items-end justify-center h-full text-white mr-20">
+        <div class="text-4xl text-center">
+            <div class="menu-item grande mb-20 cursor-pointer">
+                <a href="/Frontend/htmls/Modo.html">INICIAR</a>
             </div>
-
-            <div id="ammo-card">
-                <div id="ammo-splash">
-                    <span id="ammo-count">15</span>
-                </div>
-                <img src="../Frontend/assets/images/Pistola_agua.png" alt="Arma" id="water-gun-icon">
+            <div class="menu-item grande mb-20 cursor-pointer">
+                <a href="/Frontend/htmls/Setting.html">OPCIONES</a>
             </div>
-        </div>
-
-        <div id="crosshair">
-            <img src="../Frontend/assets/images/Mira.png" alt="Mira">
+            <div class="menu-item grande cursor-pointer">SALIR</div>
         </div>
     </div>
-
-    <script type="module" src="scripts/main.js"></script>
 </body>
+
 </html>
