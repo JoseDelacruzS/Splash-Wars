@@ -1,2 +1,2 @@
 # Splash-Wars
-Poryecto videojuego en web 
+Proyecto videojuego en web 
