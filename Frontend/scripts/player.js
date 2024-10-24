@@ -3,12 +3,12 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
 
 export class Player {
-    constructor(scene, camera) {
+    constructor(scene, camera, posx, posy, posz, control) {
         this.scene = scene;
         this.camera = camera;
         this.model = null;
         this.velocity = new THREE.Vector3();
-        this.moveSpeed = 7;
+        this.moveSpeed = 20;
 
         //Camara
         this.cameraOffset = new THREE.Vector3(0, 5.5, -3);
@@ -26,19 +26,19 @@ export class Player {
         this.velocityY = 10; 
         this.jumpHeight = 100; 
 
-        this.loadModel();
-        this.setupKeyboardControls();
+        this.loadModel(posx, posy, posz);
+        this.setupKeyboardControls(control);
         this.setupMouseControls();
     }
 
-    loadModel() {
+    loadModel(posx, posy, posz) {
         const loader = new FBXLoader();
         loader.load(
             '/Frontend/assets/models/Player/source/little_boy_2.fbx',
             (object) => {
                 this.model = object;
                 this.model.scale.set(0.03, 0.03, 0.03);
-                this.model.position.set(0, 1, 0);
+                this.model.position.set(posx, posy, posz);
                 this.loadTexture();
                 this.animations = new PlayerAnimations(this.model);
                 this.loadAnimations();
@@ -71,17 +71,28 @@ export class Player {
         });
     }
 
-    setupKeyboardControls() {
+    setupKeyboardControls(control) {
         this.keys = {
             w: false,
             a: false,
             s: false,
             d: false,
-            space: false // Agregar espacio para el salto
+            space: false, // Agregar espacio para el salto
+            j: false,
+            k: false,
+            l: false,
+            i: false,
+            n: false // n es para salto
         };
 
-        document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
-        document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
+        if(control){
+
+            document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
+            document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
+        }else{
+            document.addEventListener('keydown', (event) => this.onKeyDown2(event), false);
+            document.addEventListener('keyup', (event) => this.onKeyUp2(event), false);
+        }
     }
 
     onKeyDown(event) {
@@ -99,6 +110,21 @@ export class Player {
         }
     }
 
+    onKeyDown2(event) {
+        switch (event.key.toLowerCase()) {
+            case 'i': this.keys.i = true; break;
+            case 'j': this.keys.j = true; break;
+            case 'k': this.keys.k = true; break;
+            case 'l': this.keys.l = true; break;
+            case 'n': // Espacio para saltar
+                if (!this.isJumping) {
+                    this.isJumping = true;
+                    this.velocityY = this.jumpVelocity; // Iniciar el salto
+                }
+                break;
+        }
+    }
+
     onKeyUp(event) {
         switch (event.key.toLowerCase()) {
             case 'w': this.keys.w = false; break;
@@ -107,6 +133,16 @@ export class Player {
             case 'd': this.keys.d = false; break;
         }
     }
+
+    onKeyUp2(event) {
+        switch (event.key.toLowerCase()) {
+            case 'i': this.keys.i = false; break;
+            case 'j': this.keys.j = false; break;
+            case 'k': this.keys.k = false; break;
+            case 'l': this.keys.l = false; break;
+        }
+    }
+
 
     setupMouseControls() {
         document.addEventListener('mousemove', (event) => this.onMouseMove(event), false);
@@ -148,6 +184,12 @@ export class Player {
         if (this.keys.s) this.velocity.sub(forward);  // Atrás
         if (this.keys.a) this.velocity.sub(right);    // Izquierda
         if (this.keys.d) this.velocity.add(right);    // Derecha
+
+        //Controles 2
+        if (this.keys.i) this.velocity.add(forward);  // Adelante
+        if (this.keys.k) this.velocity.sub(forward);
+        if (this.keys.j) this.velocity.sub(right);    // Izquierda
+        if (this.keys.l) this.velocity.add(right); 
 
         // Normalizar la velocidad para que no sea más rápida en diagonal
         if (this.velocity.length() > 0) {
