@@ -34,7 +34,7 @@ export class Player {
     loadModel() {
         const loader = new FBXLoader();
         loader.load(
-            '../assets/models/Player/source/Char_Soccer_03.fbx',
+            '../assets/models/Player/source/little_boy_2.fbx',
             (object) => {
                 this.model = object;
                 this.model.scale.set(1, 1, 1);
@@ -56,7 +56,7 @@ export class Player {
 
     loadTexture() {
         const textureLoader = new THREE.TextureLoader();
-        textureLoader.load('../assets/models/Player/textures/Char_Soccer_03.png', (texture) => {
+        textureLoader.load('../assets/models/Player/textures/little_boy_2.png', (texture) => {
             this.model.traverse((child) => {
                 if (child.isMesh) {
                     const material = new THREE.MeshLambertMaterial({
