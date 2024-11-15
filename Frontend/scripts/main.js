@@ -92,6 +92,31 @@ function setupSocketListeners() {
     });
 }
 
+// Función para crear el modelo del jugador
+function createPlayerModel(callback) {
+    const loader = new FBXLoader();
+    loader.load('../assets/models/Player/source/little_boy_2.fbx', (object) => {
+        object.scale.set(0.03, 0.03, 0.03);
+        object.position.set(0, 1, 0);
+        callback(object); // Llama al callback con el modelo cargado
+    });
+}
+
+// Función para actualizar el modelo del jugador
+function updatePlayerModel(playerId, position) {
+    if (!players[playerId].model) {
+        // Si no existe, crea el modelo del jugador
+        createPlayerModel((playerModel) => {
+            players[playerId].model = playerModel;
+            gameScene.add(playerModel); // Agrega el modelo a la escena
+            players[playerId].model.position.set(position.x, position.y, position.z); // Establece la posición inicial
+        });
+    } else {
+        // Actualiza la posición del modelo
+        players[playerId].model.position.set(position.x, position.y, position.z);
+    }
+}
+
 // Actualizar HUD
 function updateHUD() {
     hud.updateLife(playerLife);
@@ -118,24 +143,5 @@ function onWindowResize() {
     gameScene.onWindowResize();
 }
 
-// Función para actualizar el modelo del jugador
-function updatePlayerModel(playerId, position) {
-    if (!players[playerId].model) {
-        // Si no existe, crea el modelo del jugador
-        createPlayerModel((playerModel, mixer) => {
-            players[playerId].model = playerModel;
-            players[playerId].mixer = mixer; // Guarda el mixer para animaciones
-            gameScene.add(playerModel); // Agrega el modelo a la escena
-            players[playerId].model.position.set(position.x, position.y, position.z); // Establece la posición inicial
-        });
-    } else {
-        // Actualiza la posición del modelo
-        players[playerId].model.position.set(position.x, position.y, position.z);
-        // Actualiza las animaciones si es necesario
-        if (players[playerId].mixer) {
-            players[playerId].mixer.update(deltaTime); // deltaTime debe ser calculado en el ciclo de animación
-        }
-    }
-}
 // Ejecutar init cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', init);
