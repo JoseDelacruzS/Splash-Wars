@@ -2,12 +2,14 @@
 import * as THREE from 'three';
 import GameScene from './scene.js';
 import { HUD } from './hud.js';
+import { Player } from './player.js';
 
 // Variables de la escena
 let gameScene, hud;
 let playerLife = 100;
 let timeLeft = 120; // 2 minutos
 let ammo = 15;
+let player;
 
 // Conectar al servidor de Socket.IO
 const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com');
@@ -31,6 +33,9 @@ function init() {
     // Crear escena y HUD
     gameScene = new GameScene();
     hud = new HUD();
+
+    // Crear el jugador después de la inicialización de la escena
+    player = new Player(gameScene.camera);
 
     // Unirse a la sala con nombre aleatorio
     joinRandomRoom();
@@ -100,10 +105,14 @@ function updateHUD() {
 
 // Ciclo de animación
 function animate() {
-    requestAnimationFrame(animate);
     update();
-    gameScene.render();
     updateHUD();
+    requestAnimationFrame(animate);
+    const deltaTime = gameScene.clock.getDelta();
+
+    player.update(deltaTime);
+    gameScene.update();
+    gameScene.render();
 }
 
 // Función de actualización del juego (Lógica adicional aquí)
