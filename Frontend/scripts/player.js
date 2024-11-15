@@ -223,9 +223,9 @@ export class Player {
 
     loadAnimations() {
         // Carga tus animaciones aquí
-        this.animations.loadAnimation('idle', '../animations/player/Idle.fbx');
-        this.animations.loadAnimation('run', '../animations/player/Running.fbx');
-        this.animations.loadAnimation('jump', '../animations/player/Jump.fbx');
+        this.animations.loadAnimation('idle', '../animations/player/Pistol Idle.fbx');
+        this.animations.loadAnimation('run', '../animations/player/Pistol Run.fbx');
+        this.animations.loadAnimation('jump', '../animations/player/Pistol Jump.fbx');
         // Añade más animaciones según sea necesario
     }
 }
