@@ -1,28 +1,53 @@
-// PlayerController.js
+// controllers/playerController.js
+const players = {}; // Objeto para almacenar jugadores conectados
 
-const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com/');  // URL de tu servidor
-class PlayerController {
-    constructor(socket, playerId) {
-        this.socket = socket;
-        this.playerId = playerId;
-        this.position = { x: 0, y: 0, z: 0 };
-    }
+const playerController = {};
 
-    // Mover al jugador
-    movePlayer(deltaX, deltaY, deltaZ) {
-        this.position.x += deltaX;
-        this.position.y += deltaY;
-        this.position.z += deltaZ;
+// Inicializar un nuevo jugador
+playerController.initPlayer = (socket) => {
+    players[socket.id] = {
+        id: socket.id,
+        health: 100,
+        position: { x: 0, y: 0, z: 0 },
+        score: 0
+    };
 
-        // Enviar la nueva posición al servidor
-        this.socket.emit('updatePlayerPosition', this.position);
-    }
+    socket.emit('playerInitialized', players[socket.id]);
+    console.log(`Jugador inicializado: ${socket.id}`);
 
-    // Recibir actualización de la posición de otro jugador
-    updatePlayerPosition(position) {
-        this.position = position;
-        // Actualizar la posición del jugador en Three.js (puedes hacerlo con el objeto 3D correspondiente)
-    }
-}
+    // Actualizar posición del jugador
+    socket.on('updatePosition', (position) => {
+        if (players[socket.id]) {
+            players[socket.id].position = position;
+            socket.broadcast.emit('playerPositionUpdated', { id: socket.id, position });
+        }
+    });
 
-module.exports = PlayerController;
+    // Manejar daño recibido por el jugador
+    socket.on('receiveDamage', (damage) => {
+        if (players[socket.id]) {
+            players[socket.id].health -= damage;
+            if (players[socket.id].health <= 0) {
+                playerController.playerKilled(socket, players[socket.id]);
+            } else {
+                socket.emit('healthUpdated', players[socket.id].health);
+            }
+        }
+    });
+};
+
+// Eliminar jugador al desconectarse
+playerController.removePlayer = (id) => {
+    delete players[id];
+    console.log(`Jugador eliminado: ${id}`);
+};
+
+// Manejo de bajas
+playerController.playerKilled = (socket, player) => {
+    player.health = 0;
+    player.score = 0; // Resetea el puntaje si quieres
+    socket.emit('playerKilled');
+    console.log(`Jugador ${player.id} ha sido eliminado`);
+};
+
+module.exports = playerController;
