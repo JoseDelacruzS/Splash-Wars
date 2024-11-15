@@ -69,7 +69,7 @@ export class Map {
     loadStage() {
         const loader = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
         loader.load(
-            '/Frontend/assets/models/scenarios/low_poly_city/city.glb', // Cambia esto a la ruta de tu modelo
+            '../assets/models/scenarios/low_poly_city/city.glb', // Cambia esto a la ruta de tu modelo
             (gltf) => {
                 console.log('Modelo cargado con exito', gltf)
                 const stage = gltf.scene;

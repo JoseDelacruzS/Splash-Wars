@@ -34,7 +34,7 @@ export class Player {
     loadModel() {
         const loader = new FBXLoader();
         loader.load(
-            '/Frontend/assets/models/Player/source/little_boy_2.fbx',
+            '../assets/models/Player/source/little_boy_2.fbx',
             (object) => {
                 this.model = object;
                 this.model.scale.set(0.03, 0.03, 0.03);
@@ -56,7 +56,7 @@ export class Player {
 
     loadTexture() {
         const textureLoader = new THREE.TextureLoader();
-        textureLoader.load('/Frontend/assets/models/Player/textures/little_boy_2.png', (texture) => {
+        textureLoader.load('../assets/models/Player/textures/little_boy_2.png', (texture) => {
             this.model.traverse((child) => {
                 if (child.isMesh) {
                     const material = new THREE.MeshLambertMaterial({
@@ -223,9 +223,9 @@ export class Player {
 
     loadAnimations() {
         // Carga tus animaciones aquí
-        this.animations.loadAnimation('idle', '/Frontend/animations/player/Idle.fbx');
-        this.animations.loadAnimation('run', '/Frontend/animations/player/Running.fbx');
-        this.animations.loadAnimation('jump', '/Frontend/animations/player/Jump.fbx');
+        this.animations.loadAnimation('idle', '../animations/player/Idle.fbx');
+        this.animations.loadAnimation('run', '../animations/player/Running.fbx');
+        this.animations.loadAnimation('jump', '../animations/player/Jump.fbx');
         // Añade más animaciones según sea necesario
     }
 }
