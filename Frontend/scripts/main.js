@@ -10,13 +10,30 @@ let timeLeft = 120; // 2 minutos
 let ammo = 15;
 
 // Conectar al servidor de Socket.IO
-const socket = io('http://localhost:3000'); // Cambia el puerto si es necesario
+const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com');
+
+// Función para generar nombres aleatorios
+function generateRandomName() {
+    const names = ['Player', 'Warrior', 'Hunter', 'Ninja', 'Ghost', 'Falcon', 'Viper', 'Phoenix', 'Shadow'];
+    const randomNumber = Math.floor(Math.random() * names.length);
+    return names[randomNumber] + Math.floor(Math.random() * 1000); // Para hacerlo más único
+}
+
+// Función para unirse a una sala con nombre aleatorio
+function joinRandomRoom() {
+    const roomId = 'room1';  // O puedes hacer que sea dinámico, por ejemplo, generar un ID de sala
+    const playerName = generateRandomName();  // Genera un nombre aleatorio para el jugador
+    socket.emit('joinRoom', roomId, playerName); // Emitir el evento de unirse a la sala con el nombre aleatorio
+}
 
 // Inicialización
 function init() {
     // Crear escena y HUD
     gameScene = new GameScene();
     hud = new HUD();
+
+    // Unirse a la sala con nombre aleatorio
+    joinRandomRoom();
 
     // Escuchar eventos del servidor
     setupSocketListeners();
@@ -61,6 +78,16 @@ function setupSocketListeners() {
     socket.on('playerKilled', () => {
         console.log('Has sido eliminado');
         // Lógica para terminar el juego o mostrar pantalla de "game over"
+    });
+
+    // Evento de mensaje general desde el servidor
+    socket.on('message', (message) => {
+        console.log(message);
+    });
+
+    // Actualización de la lista de jugadores
+    socket.on('playersList', (players) => {
+        console.log('Jugadores en la sala:', players);
     });
 }
 
