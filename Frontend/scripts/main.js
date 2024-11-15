@@ -1,5 +1,6 @@
 // Importar módulos y clases necesarias
 import * as THREE from 'three';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'; // Asegúrate de importar FBXLoader
 import GameScene from './scene.js';
 import { HUD } from './hud.js';
 
@@ -8,6 +9,7 @@ let gameScene, hud;
 let playerLife = 100;
 let timeLeft = 120; // 2 minutos
 let ammo = 15;
+let players = {}; // Objeto para almacenar los jugadores conectados
 
 // Conectar al servidor de Socket.IO
 const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com');
@@ -53,7 +55,6 @@ function setupSocketListeners() {
     // Evento de inicio del juego
     socket.on('gameStarted', () => {
         console.log('El juego ha comenzado');
-        // Opcional: Iniciar lógica específica del juego
     });
 
     // Actualización de la vida del jugador
@@ -77,17 +78,17 @@ function setupSocketListeners() {
     // Evento de eliminación del jugador
     socket.on('playerKilled', () => {
         console.log('Has sido eliminado');
-        // Lógica para terminar el juego o mostrar pantalla de "game over"
     });
 
-    // Evento de mensaje general desde el servidor
-    socket.on('message', (message) => {
-        console.log(message);
-    });
-
-    // Actualización de la lista de jugadores
-    socket.on('playersList', (players) => {
-        console.log('Jugadores en la sala:', players);
+    // Escuchar actualizaciones de posición de otros jugadores
+    socket.on('playerPositionUpdated', (data) => {
+        if (!players[data.id]) {
+            // Si el jugador no existe, inicialízalo
+            players[data.id] = { id: data.id, position: data.position, model: null };
+        }
+        // Actualizar la posición del jugador existente
+        players[data.id].position = data.position;
+        updatePlayerModel(data.id, data.position); // Llama a la función aquí
     });
 }
 
@@ -117,5 +118,24 @@ function onWindowResize() {
     gameScene.onWindowResize();
 }
 
+// Función para actualizar el modelo del jugador
+function updatePlayerModel(playerId, position) {
+    if (!players[playerId].model) {
+        // Si no existe, crea el modelo del jugador
+        createPlayerModel((playerModel, mixer) => {
+            players[playerId].model = playerModel;
+            players[playerId].mixer = mixer; // Guarda el mixer para animaciones
+            gameScene.add(playerModel); // Agrega el modelo a la escena
+            players[playerId].model.position.set(position.x, position.y, position.z); // Establece la posición inicial
+        });
+    } else {
+        // Actualiza la posición del modelo
+        players[playerId].model.position.set(position.x, position.y, position.z);
+        // Actualiza las animaciones si es necesario
+        if (players[playerId].mixer) {
+            players[playerId].mixer.update(deltaTime); // deltaTime debe ser calculado en el ciclo de animación
+        }
+    }
+}
 // Ejecutar init cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', init);

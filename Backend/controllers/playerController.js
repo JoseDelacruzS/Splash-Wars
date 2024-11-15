@@ -34,6 +34,7 @@ playerController.initPlayer = (socket) => {
             }
         }
     });
+    
 };
 
 // Eliminar jugador al desconectarse
@@ -49,5 +50,7 @@ playerController.playerKilled = (socket, player) => {
     socket.emit('playerKilled');
     console.log(`Jugador ${player.id} ha sido eliminado`);
 };
+
+
 
 module.exports = playerController;

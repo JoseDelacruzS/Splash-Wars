@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Watermelon Days';
-    src: url('../assets/Fuentes/Watermelon\ Days.ttf') format('truetype');
+    src: url('./assets/Fuentes/Watermelon\ Days.ttf') format('truetype');
 }
 
 canvas {
@@ -116,7 +116,7 @@ body, html {
 
 /* Splash para la munición */
 #ammo-splash {
-    background-image: url('../assets/images/Splash.png');
+    background-image: url('./assets/images/Splash.png');
     background-size: contain;
     background-repeat: no-repeat;
     width: 800px;
