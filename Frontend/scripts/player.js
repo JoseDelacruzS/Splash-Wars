@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
 
 export class Player {
@@ -10,21 +10,20 @@ export class Player {
         this.velocity = new THREE.Vector3();
         this.moveSpeed = 7;
 
-        //Camara
+        // Camera offsets
         this.cameraOffset = new THREE.Vector3(0, 5.5, -3);
         this.cameraLookAtOffset = new THREE.Vector3(0, 4.5, 0);
 
         this.mouseSensitivity = 0.001;
         this.pitch = 0;
         this.yaw = 0;
-        this.PlayerAnimations = null;
+        this.animations = null;
 
-        //Salto
+        // Jumping
         this.isJumping = false; 
         this.jumpVelocity = 5;
         this.gravity = -9.81; 
-        this.velocityY = 10; 
-        this.jumpHeight = 100; 
+        this.velocityY = 0; 
 
         this.loadModel();
         this.setupKeyboardControls();
@@ -77,7 +76,7 @@ export class Player {
             a: false,
             s: false,
             d: false,
-            space: false // Agregar espacio para el salto
+            space: false
         };
 
         document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
@@ -90,10 +89,10 @@ export class Player {
             case 'a': this.keys.a = true; break;
             case 's': this.keys.s = true; break;
             case 'd': this.keys.d = true; break;
-            case ' ': // Espacio para saltar
+            case ' ': // Space to jump
                 if (!this.isJumping) {
                     this.isJumping = true;
-                    this.velocityY = this.jumpVelocity; // Iniciar el salto
+                    this.velocityY = this.jumpVelocity; // Start jump
                 }
                 break;
         }
@@ -128,64 +127,63 @@ export class Player {
 
     update(deltaTime) {
         if (!this.model) return;
-        // Inicializamos la velocidad en 0
         this.velocity.set(0, 0, 0);
 
-        // Matriz de rotación basada en la rotación del modelo
-        const rotationMatrix = new THREE.Matrix4();
+        // Rotation matrix based on model's rotation
+        const rotationMatrix = new THREE.Matrix4 ();
         rotationMatrix.makeRotationY(this.model.rotation.y);
 
-        // Direcciones de movimiento básicas (hacia adelante, derecha, etc.)
+        // Basic movement directions (forward, right, etc.)
         const forward = new THREE.Vector3(0, 0, 1);
         const right = new THREE.Vector3(-1, 0, 0);
 
-        // Aplicar la rotación a las direcciones
+        // Apply rotation to directions
         forward.applyMatrix4(rotationMatrix);
         right.applyMatrix4(rotationMatrix);
 
-        // Actualizar la velocidad dependiendo de las teclas presionadas
-        if (this.keys.w) this.velocity.add(forward);  // Adelante
-        if (this.keys.s) this.velocity.sub(forward);  // Atrás
-        if (this.keys.a) this.velocity.sub(right);    // Izquierda
-        if (this.keys.d) this.velocity.add(right);    // Derecha
+        // Update velocity based on pressed keys
+        if (this.keys.w) this.velocity.add(forward);  // Forward
+        if (this.keys.s) this.velocity.sub(forward);  // Backward
+        if (this.keys.a) this.velocity.sub(right);    // Left
+        if (this.keys.d) this.velocity.add(right);    // Right
 
-        // Normalizar la velocidad para que no sea más rápida en diagonal
+        // Normalize velocity to prevent faster diagonal movement
         if (this.velocity.length() > 0) {
             this.velocity.normalize().multiplyScalar(this.moveSpeed * deltaTime);
             this.model.position.add(this.velocity);
         }
 
-        // Manejo de salto
+        // Jump handling
         if (this.isJumping) {
-            this.velocityY += this.gravity * deltaTime; // Aplicar gravedad
-            this.model.position.y += this.velocityY * deltaTime; // Actualizar posición en Y
+            this.velocityY += this.gravity * deltaTime; // Apply gravity
+            this.model.position.y += this.velocityY * deltaTime; // Update Y position
 
-            // Verificar si el jugador ha caído al suelo
-            if (this.model.position.y <= .5) { // Suponiendo que 1 es la altura del suelo
-                this.model.position.y = 1; // Ajustar la posición al suelo
-                this.isJumping = false; // El jugador ya no está saltando
-                this.velocityY = 1; // Reiniciar la velocidad vertical
+            // Check if player has landed
+            if (this.model.position.y <= 1) { // Assuming 1 is the ground height
+                this.model.position.y = 1; // Adjust position to ground
+                this.isJumping = false; // Player is no longer jumping
+                this.velocityY = 0; // Reset vertical velocity
             }
         }
 
-        // Actualiza las animaciones
+        // Update animations
         if (this.animations) {
             this.animations.update(deltaTime);
         }
 
-        // Decide qué animación reproducir basado en el estado del jugador
+        // Decide which animation to play based on player state
         if (this.isJumping) {
-            this.animations.play('jump');  // Si el jugador está saltando, reproduce la animación de salto
+            this.animations.play('jump');  // Play jump animation
         } else if (this.velocity.length() > 0) {
-            this.animations.play('run');  // Si el jugador se está moviendo, reproduce la animación de correr
+            this.animations.play('run');  // Play run animation
         } else {
-            this.animations.play('idle');  // Si el jugador está quieto, reproduce la animación de idle
+            this.animations.play('idle');  // Play idle animation
         }
 
-        // Actualiza la rotación del modelo para que mire hacia donde apunta la cámara
+        // Update model rotation to face where the camera is pointing
         this.model.rotation.y = this.yaw;
 
-        // Actualiza la posición de la cámara
+        // Update camera position
         this.updateCameraPosition();
         socket.emit('updatePosition', { x: this.model.position.x, y: this.model.position.y, z: this.model.position.z });
     }
@@ -202,14 +200,12 @@ export class Player {
 
         this.camera.position.copy(cameraPosition);
 
-        // Calcula el punto de mira
+        // Calculate look-at point
         const lookAtPoint = new THREE.Vector3(
             this.model.position.x + this.cameraLookAtOffset.x,
             this.model.position.y + this.cameraLookAtOffset.y,
             this.model.position.z + this.cameraLookAtOffset.z
         );
-
-        lookAtPoint.y -= Math.tan(this.pitch) * this.cameraOffset.z;
 
         this.camera.lookAt(lookAtPoint);
     }
@@ -223,10 +219,10 @@ export class Player {
     }
 
     loadAnimations() {
-        // Carga tus animaciones aquí
+        // Load your animations here
         this.animations.loadAnimation('idle', '../animations/player/Idle.fbx');
         this.animations.loadAnimation('run', '../animations/player/Running.fbx');
         this.animations.loadAnimation('jump', '../animations/player/Jump.fbx');
-        // Añade más animaciones según sea necesario
+        // Add more animations as needed
     }
 }

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'; // Asegúrate de importar FBXLoader
 import GameScene from './scene.js';
 import { HUD } from './hud.js';
+import { Player } from './player.js'; // Asegúrate de que la ruta sea correcta
 
 // Variables de la escena
 let gameScene, hud;
@@ -10,6 +11,7 @@ let playerLife = 100;
 let timeLeft = 120; // 2 minutos
 let ammo = 15;
 let players = {}; // Objeto para almacenar los jugadores conectados
+let player; // Variable para almacenar la instancia del jugador
 
 // Conectar al servidor de Socket.IO
 const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com');
@@ -25,7 +27,7 @@ function generateRandomName() {
 function joinRandomRoom() {
     const roomId = 'room1';  // O puedes hacer que sea dinámico, por ejemplo, generar un ID de sala
     const playerName = generateRandomName();  // Genera un nombre aleatorio para el jugador
-    socket.emit('joinRoom', roomId, playerName); // Emitir el evento de unirse a la sala con el nombre aleatorio
+    socket.emit ('joinRoom', roomId, playerName); // Emitir el evento de unirse a la sala con el nombre aleatorio
 }
 
 // Inicialización
@@ -33,6 +35,9 @@ function init() {
     // Crear escena y HUD
     gameScene = new GameScene();
     hud = new HUD();
+
+    // Crear el jugador
+    player = new Player(gameScene.scene, gameScene.camera);
 
     // Unirse a la sala con nombre aleatorio
     joinRandomRoom();
@@ -108,7 +113,7 @@ function updatePlayerModel(playerId, position) {
         // Si no existe, crea el modelo del jugador
         createPlayerModel((playerModel) => {
             players[playerId].model = playerModel;
-            gameScene.add(playerModel); // Agrega el modelo a la escena
+            gameScene.scene.add(playerModel); // Agrega el modelo a la escena
             players[playerId].model.position.set(position.x, position.y, position.z); // Establece la posición inicial
         });
     } else {
@@ -136,6 +141,11 @@ function animate() {
 function update() {
     // Emitir el estado actual si es necesario (como posición o eventos de disparo)
     socket.emit('updatePlayerState', { life: playerLife, ammo, timeLeft });
+
+    // Si el jugador tiene un método de actualización, llámalo aquí
+    if (player) {
+        player.update();
+    }
 }
 
 // Ajustar tamaño de la ventana

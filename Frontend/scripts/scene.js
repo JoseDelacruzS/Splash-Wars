@@ -65,16 +65,6 @@ export default class GameScene {
         if (this.map) {
             this.map.update();
         }
-        // Escuchar actualizaciones de posición de otros jugadores
-        socket.on('playerPositionUpdated', (data) => {
-            if (players[data.id]) {
-                // Actualizar la posición del jugador existente
-                players[data.id].position = data.position;
-                // Aquí debes actualizar el modelo del jugador en la escena
-                // Por ejemplo, si tienes un método para crear o actualizar el modelo del jugador:
-                updatePlayerModel(data.id, data.position);
-            }
-        });
     }
 
     render() {
@@ -102,5 +92,4 @@ export default class GameScene {
         this.update();
         this.render();
     }
-
 }
