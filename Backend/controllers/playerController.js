@@ -1,5 +1,6 @@
 // PlayerController.js
 
+const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com/');  // URL de tu servidor
 class PlayerController {
     constructor(socket, playerId) {
         this.socket = socket;
@@ -22,9 +23,6 @@ class PlayerController {
         this.position = position;
         // Actualizar la posición del jugador en Three.js (puedes hacerlo con el objeto 3D correspondiente)
     }
-
-    // Manejo de otros eventos del jugador (disparar, interactuar, etc.)
-    // ...
 }
 
 module.exports = PlayerController;

@@ -1,5 +1,6 @@
 // GameController.js
 
+const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com/');  // URL de tu servidor
 class GameController {
     constructor(socket) {
         this.socket = socket;

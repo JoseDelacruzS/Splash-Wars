@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
+const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com/');  // URL de tu servidor
 
 export class Player {
     constructor(scene, camera, socket) {
-        const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com/');  // URL de tu servidor
         this.scene = scene;
         this.camera = camera;
         this.socket = socket; // Almacenar el socket para comunicación
@@ -15,6 +15,7 @@ export class Player {
         this.isJumping = false;
         this.velocityY = 10;
         this.gravity = -9.81;
+        this.otherPlayers = {};  // Añadir esto al constructor de Player
 
         // Conectar el socket para recibir actualizaciones de otros jugadores
         this.socket.on('playerMoved', (data) => {
