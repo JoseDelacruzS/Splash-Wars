@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 // Configuración de Socket.IO (debe ir antes de usar io)
 const io = new Server(server, {
     cors: {
-        origin: "*", // Permite cualquier origen o cambia a un dominio específico si es necesario
+        origin: "https://splash-wars-game-a9d5d91bfbd6.herokuapp.com",  // Reemplaza con tu dominio de producción
     }
 });
 
@@ -37,6 +37,8 @@ io.on('connection', (socket) => {
 });
 
 // Inicia el servidor escuchando en todas las interfaces de red (0.0.0.0)
-server.listen(3000, '0.0.0.0', () => {
-    console.log('Servidor corriendo en http://0.0.0.0:3000');
+const port = process.env.PORT || 3000;
+server.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor corriendo en http://0.0.0.0:${port}`);
 });
+
