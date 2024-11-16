@@ -3,7 +3,7 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
 
 export class Player {
-    constructor(scene, camera, position = { x: 0, y: 3, z: 0 }) {
+    constructor(scene, camera) {
         this.scene = scene;
         this.camera = camera;
         this.model = null;
@@ -20,17 +20,15 @@ export class Player {
         this.PlayerAnimations = null;
 
         //Salto
-        this.isJumping = false;
+        this.isJumping = false; 
         this.jumpVelocity = 5;
-        this.gravity = -9.81;
-        this.velocityY = 10;
-        this.jumpHeight = 100;
+        this.gravity = -9.81; 
+        this.velocityY = 10; 
+        this.jumpHeight = 100; 
 
         this.loadModel();
         this.setupKeyboardControls();
         this.setupMouseControls();
-
-        this.model.position.set(position.x, position.y, position.z);
     }
 
     loadModel() {
@@ -189,10 +187,6 @@ export class Player {
 
         // Actualiza la posición de la cámara
         this.updateCameraPosition();
-
-        // Emitir la posición actual del jugador al servidor
-        socket.emit('updatePosition', { x: this.model.position.x, y: this.model.position.y, z: this.model.position.z });
-
     }
 
     updateCameraPosition() {

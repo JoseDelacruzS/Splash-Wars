@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, '../Frontend')));
 
 // Ruta para el archivo 'index.html' en la raíz
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/index.html'));
 });
 
 // Configuración de Socket.IO
@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
     // Cuando un jugador se une a una sala
     socket.on('joinRoom', (roomId, playerName) => {
         const room = rooms[roomId] || [];
-
+        
         if (room.length < 6) {  // Si hay espacio en la sala
             room.push({ id: socket.id, name: playerName });
             rooms[roomId] = room;
@@ -52,9 +52,6 @@ io.on('connection', (socket) => {
         }
     });
 
-    // Enviar a todos los jugadores la lista actualizada de jugadores en la sala
-    io.to(roomId).emit('playersList', room);
-
     // Cuando un jugador desconecta
     socket.on('disconnect', () => {
         console.log('Un jugador se desconectó:', socket.id);
@@ -63,7 +60,7 @@ io.on('connection', (socket) => {
         for (const roomId in rooms) {
             const room = rooms[roomId];
             const index = room.findIndex(player => player.id === socket.id);
-
+            
             if (index !== -1) {
                 // Eliminar al jugador de la sala
                 const playerName = room[index].name;

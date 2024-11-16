@@ -8,7 +8,6 @@ let gameScene, hud;
 let playerLife = 100;
 let timeLeft = 120; // 2 minutos
 let ammo = 15;
-const activePlayers = {};
 
 // Conectar al servidor de Socket.IO
 const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com');
@@ -87,10 +86,8 @@ function setupSocketListeners() {
     });
 
     // Actualización de la lista de jugadores
-    // Evento de actualización de la lista de jugadores
     socket.on('playersList', (players) => {
         console.log('Jugadores en la sala:', players);
-        updatePlayers(players); // Llama a la función para actualizar los jugadores en la escena
     });
 }
 
@@ -118,23 +115,6 @@ function update() {
 // Ajustar tamaño de la ventana
 function onWindowResize() {
     gameScene.onWindowResize();
-}
-
-// Función para actualizar los jugadores en la escena
-function updatePlayers(players) {
-    players.forEach(playerData => {
-        const { id, name, position } = playerData;
-
-        // Si el jugador ya existe, actualiza su posición
-        if (activePlayers[id]) {
-            activePlayers[id].model.position.set(position.x, position.y, position.z);
-        } else {
-            // Si el jugador no existe, crea un nuevo modelo
-            const newPlayer = new Player(gameScene.scene, gameScene.camera); // Asegúrate de que el constructor de Player acepte la posición
-            newPlayer.model.position.set(position.x, position.y, position.z);
-            activePlayers[id] = newPlayer; // Almacena el nuevo jugador
-        }
-    });
 }
 
 // Ejecutar init cuando el DOM esté cargado
