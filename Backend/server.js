@@ -27,61 +27,52 @@ const rooms = {};
 // Mantener un registro del estado de los jugadores
 const players = {};
 
-// Configuración de conexión de Socket.IO
 io.on('connection', (socket) => {
-    console.log('Un jugador se conectó:', socket.id);
+    console.log('Jugador conectado:', socket.id);
 
-    // Cuando un jugador se une a una sala
+    // Registrar jugador
+    players[socket.id] = {
+        id: socket.id,
+        name: '', // Asignar el nombre más adelante
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 },
+    };
+
+    // Unirse a una sala
     socket.on('joinRoom', (roomId, playerName) => {
-        const room = rooms[roomId] || [];
-        
-        if (room.length < 6) {  // Si hay espacio en la sala
-            room.push({ id: socket.id, name: playerName });
-            rooms[roomId] = room;
+        players[socket.id].name = playerName;
 
-            // Unir al jugador a la sala
-            socket.join(roomId);
-            console.log(`${playerName} se unió a la sala ${roomId}`);
+        socket.join(roomId);
+        console.log(`${playerName} se unió a la sala ${roomId}`);
 
-            // Enviar un mensaje a todos los jugadores en la sala
-            io.to(roomId).emit('message', `${playerName} se ha unido al juego`);
+        // Enviar a todos los jugadores en la sala la lista de jugadores actualizada
+        io.to(roomId).emit('playersList', Object.values(players));
+    });
 
-            // Enviar la lista de jugadores en la sala
-            io.to(roomId).emit('playersList', room);
-        } else {
-            socket.emit('message', 'La sala está llena. Intenta con otra.');
+    // Actualizar posición del jugador
+    socket.on('updatePlayerState', (state) => {
+        if (players[socket.id]) {
+            players[socket.id].position = state.position;
+            players[socket.id].rotation = state.rotation;
+        }
+
+        // Enviar actualización a los demás jugadores en la misma sala
+        const roomId = Object.keys(socket.rooms).find((room) => room !== socket.id);
+        if (roomId) {
+            socket.to(roomId).emit('updatePlayers', players);
         }
     });
 
-    // Cuando un jugador desconecta
+    // Manejar desconexión
     socket.on('disconnect', () => {
-        console.log('Un jugador se desconectó:', socket.id);
+        console.log('Jugador desconectado:', socket.id);
+        delete players[socket.id];
 
-        // Eliminar al jugador de todas las salas
-        for (const roomId in rooms) {
-            const room = rooms[roomId];
-            const index = room.findIndex(player => player.id === socket.id);
-            
-            if (index !== -1) {
-                // Eliminar al jugador de la sala
-                const playerName = room[index].name;
-                room.splice(index, 1);
-
-                // Actualizar la sala en la lista
-                rooms[roomId] = room;
-
-                // Notificar a los demás jugadores de la sala
-                io.to(roomId).emit('message', `${playerName} se ha desconectado`);
-
-                // Enviar la nueva lista de jugadores
-                io.to(roomId).emit('playersList', room);
-            }
-        }
+        // Enviar la lista actualizada a los demás
+        io.emit('playersList', Object.values(players));
     });
-
-    // Otras funciones relacionadas con el juego
-    // ...
 });
+
 
 
 // Inicia el servidor escuchando en todas las interfaces de red (0.0.0.0)
