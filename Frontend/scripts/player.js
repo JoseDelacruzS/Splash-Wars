@@ -3,15 +3,15 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
 
 export class Player {
-    constructor(scene, camera) {
+    constructor(scene, camera, posx, posy, posz, control) {
         this.scene = scene;
         this.camera = camera;
         this.model = null;
         this.velocity = new THREE.Vector3();
-        this.moveSpeed = 7;
+        this.moveSpeed = 20;
 
         //Camara
-        this.cameraOffset = new THREE.Vector3(0, 3, -3);
+        this.cameraOffset = new THREE.Vector3(0, 5.5, -3);
         this.cameraLookAtOffset = new THREE.Vector3(0, 4.5, 0);
 
         this.mouseSensitivity = 0.001;
@@ -26,19 +26,19 @@ export class Player {
         this.velocityY = 10; 
         this.jumpHeight = 100; 
 
-        this.loadModel();
-        this.setupKeyboardControls();
+        this.loadModel(posx, posy, posz);
+        this.setupKeyboardControls(control);
         this.setupMouseControls();
     }
 
-    loadModel() {
+    loadModel(posx, posy, posz) {
         const loader = new FBXLoader();
         loader.load(
             '../assets/models/Player/source/little_boy_2.fbx',
             (object) => {
                 this.model = object;
-                this.model.scale.set(.03, .03, .03);
-                this.model.position.set(0, 3, 0);
+                this.model.scale.set(0.03, 0.03, 0.03);
+                this.model.position.set(posx, posy, posz);
                 this.loadTexture();
                 this.animations = new PlayerAnimations(this.model);
                 this.loadAnimations();
@@ -71,17 +71,28 @@ export class Player {
         });
     }
 
-    setupKeyboardControls() {
+    setupKeyboardControls(control) {
         this.keys = {
             w: false,
             a: false,
             s: false,
             d: false,
-            space: false // Agregar espacio para el salto
+            space: false, // Agregar espacio para el salto
+            j: false,
+            k: false,
+            l: false,
+            i: false,
+            n: false // n es para salto
         };
 
-        document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
-        document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
+        if(control){
+
+            document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
+            document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
+        }else{
+            document.addEventListener('keydown', (event) => this.onKeyDown2(event), false);
+            document.addEventListener('keyup', (event) => this.onKeyUp2(event), false);
+        }
     }
 
     onKeyDown(event) {
@@ -223,9 +234,9 @@ export class Player {
 
     loadAnimations() {
         // Carga tus animaciones aquí
-        this.animations.loadAnimation('idle', '../animations/player/Pistol Idle.fbx');
-        this.animations.loadAnimation('run', '../animations/player/Pistol Run.fbx');
-        this.animations.loadAnimation('jump', '../animations/player/Pistol Jump.fbx');
+        this.animations.loadAnimation('idle', '../animations/player/Idle.fbx');
+        this.animations.loadAnimation('run', '../animations/player/Running.fbx');
+        this.animations.loadAnimation('jump', '../animations/player/Jump.fbx');
         // Añade más animaciones según sea necesario
     }
 }
