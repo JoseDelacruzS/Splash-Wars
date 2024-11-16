@@ -23,8 +23,6 @@ const io = new Server(server, {
 
 // Creamos un objeto para gestionar las salas
 const rooms = {};
-// Inicializa al jugador
-playerController.initPlayer(socket);
 
 // Configuración de conexión de Socket.IO
 io.on('connection', (socket) => {
