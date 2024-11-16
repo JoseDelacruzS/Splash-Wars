@@ -37,7 +37,7 @@ export class Player {
             '../assets/models/Player/source/little_boy_2.fbx',
             (object) => {
                 this.model = object;
-                this.model.scale.set(1, 1, 1);
+                this.model.scale.set(.03, .03, .03);
                 this.model.position.set(0, 1, 0);
                 this.loadTexture();
                 this.animations = new PlayerAnimations(this.model);
