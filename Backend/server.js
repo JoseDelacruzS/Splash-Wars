@@ -11,7 +11,7 @@ app.use(express.static(path.join(__dirname, '../Frontend')));
 
 // Ruta para el archivo 'index.html' en la raíz
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/index.html'));
+    res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 // Configuración de Socket.IO
@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
             socket.emit('message', 'La sala está llena. Intenta con otra.');
         }
     });
-    
+
     // Enviar a todos los jugadores la lista actualizada de jugadores en la sala
     io.to(roomId).emit('playersList', room);
 
