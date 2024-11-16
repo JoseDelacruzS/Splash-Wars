@@ -43,51 +43,51 @@ function init() {
     animate();
 }
 
-// Función para configurar los listeners de Socket.IO
+// Lista para almacenar jugadores en la escena
+let otherPlayers = {};
+
+// Configurar listeners de sockets
 function setupSocketListeners() {
-    // Confirmar conexión
     socket.on('connect', () => {
         console.log('Conectado al servidor con ID:', socket.id);
     });
 
-    // Evento de inicio del juego
-    socket.on('gameStarted', () => {
-        console.log('El juego ha comenzado');
-        // Opcional: Iniciar lógica específica del juego
-    });
-
-    // Actualización de la vida del jugador
-    socket.on('healthUpdated', (newHealth) => {
-        playerLife = newHealth;
-        hud.updateLife(playerLife);
-    });
-
-    // Evento de munición recargada
-    socket.on('ammoReloaded', () => {
-        ammo = 15; // Restablece la munición
-        hud.updateAmmo(ammo);
-    });
-
-    // Evento de tiempo restante
-    socket.on('timeUpdated', (newTimeLeft) => {
-        timeLeft = newTimeLeft;
-        hud.updateTimer(timeLeft);
-    });
-
-    // Evento de eliminación del jugador
-    socket.on('playerKilled', () => {
-        console.log('Has sido eliminado');
-        // Lógica para terminar el juego o mostrar pantalla de "game over"
-    });
-
-    // Evento de mensaje general desde el servidor
-    socket.on('message', (message) => {
-        console.log(message);
-    });
-
-    // Actualización de la lista de jugadores
+    // Recibir lista de jugadores
     socket.on('playersList', (players) => {
-        console.log('Jugadores en la sala:', players);
+        console.log('Lista actualizada de jugadores:', players);
+
+        // Agregar o actualizar modelos de jugadores
+        players.forEach((player) => {
+            if (player.id !== socket.id && !otherPlayers[player.id]) {
+                // Crear un modelo para el nuevo jugador
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                const playerModel = new THREE.Mesh(geometry, material);
+                playerModel.position.set(player.position.x, player.position.y, player.position.z);
+                gameScene.scene.add(playerModel);
+
+                // Guardar referencia
+                otherPlayers[player.id] = playerModel;
+            }
+        });
+
+        // Eliminar jugadores desconectados
+        Object.keys(otherPlayers).forEach((id) => {
+            if (!players.some((player) => player.id === id)) {
+                gameScene.scene.remove(otherPlayers[id]);
+                delete otherPlayers[id];
+            }
+        });
+    });
+
+    // Actualizar estados de otros jugadores
+    socket.on('updatePlayers', (players) => {
+        Object.values(players).forEach((player) => {
+            if (otherPlayers[player.id]) {
+                otherPlayers[player.id].position.set(player.position.x, player.position.y, player.position.z);
+                otherPlayers[player.id].rotation.y = player.rotation.y;
+            }
+        });
     });
 }
 
