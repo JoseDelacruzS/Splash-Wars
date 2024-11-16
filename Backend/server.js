@@ -23,6 +23,8 @@ const io = new Server(server, {
 
 // Creamos un objeto para gestionar las salas
 const rooms = {};
+// Inicializa al jugador
+playerController.initPlayer(socket);
 
 // Configuración de conexión de Socket.IO
 io.on('connection', (socket) => {
@@ -31,7 +33,7 @@ io.on('connection', (socket) => {
     // Cuando un jugador se une a una sala
     socket.on('joinRoom', (roomId, playerName) => {
         const room = rooms[roomId] || [];
-        
+
         if (room.length < 6) {  // Si hay espacio en la sala
             room.push({ id: socket.id, name: playerName });
             rooms[roomId] = room;
@@ -49,6 +51,9 @@ io.on('connection', (socket) => {
             socket.emit('message', 'La sala está llena. Intenta con otra.');
         }
     });
+    
+    // Enviar a todos los jugadores la lista actualizada de jugadores en la sala
+    io.to(roomId).emit('playersList', room);
 
     // Cuando un jugador desconecta
     socket.on('disconnect', () => {
@@ -58,7 +63,7 @@ io.on('connection', (socket) => {
         for (const roomId in rooms) {
             const room = rooms[roomId];
             const index = room.findIndex(player => player.id === socket.id);
-            
+
             if (index !== -1) {
                 // Eliminar al jugador de la sala
                 const playerName = room[index].name;
