@@ -17,7 +17,7 @@ export class Map {
         this.loadStage();
         this.addSkydome();
         this.addPlane();
-        //this.setupAudio();
+        this.setupAudio();
     }
 
     addSkydome() {

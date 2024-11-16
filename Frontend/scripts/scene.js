@@ -31,7 +31,7 @@ export default class GameScene {
     }
 
     setupCamera() {
-        this.camera.position.set(0, 5, 10);
+        this.camera.position.set(0, 3, 10);
         this.camera.lookAt(this.scene.position);
     }
 
