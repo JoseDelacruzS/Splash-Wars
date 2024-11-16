@@ -128,34 +128,66 @@ export class Player {
 
     update(deltaTime) {
         if (!this.model) return;
-    
-        // Actualizar la posición del jugador (movimiento)
+        // Inicializamos la velocidad en 0
         this.velocity.set(0, 0, 0);
-        const rotationMatrix = new THREE.Matrix4().makeRotationY(this.model.rotation.y);
-        const forward = new THREE.Vector3(0, 0, 1).applyMatrix4(rotationMatrix);
-        const right = new THREE.Vector3(-1, 0, 0).applyMatrix4(rotationMatrix);
-    
-        if (this.keys.w) this.velocity.add(forward);
-        if (this.keys.s) this.velocity.sub(forward);
-        if (this.keys.a) this.velocity.sub(right);
-        if (this.keys.d) this.velocity.add(right);
-    
+
+        // Matriz de rotación basada en la rotación del modelo
+        const rotationMatrix = new THREE.Matrix4();
+        rotationMatrix.makeRotationY(this.model.rotation.y);
+
+        // Direcciones de movimiento básicas (hacia adelante, derecha, etc.)
+        const forward = new THREE.Vector3(0, 0, 1);
+        const right = new THREE.Vector3(-1, 0, 0);
+
+        // Aplicar la rotación a las direcciones
+        forward.applyMatrix4(rotationMatrix);
+        right.applyMatrix4(rotationMatrix);
+
+        // Actualizar la velocidad dependiendo de las teclas presionadas
+        if (this.keys.w) this.velocity.add(forward);  // Adelante
+        if (this.keys.s) this.velocity.sub(forward);  // Atrás
+        if (this.keys.a) this.velocity.sub(right);    // Izquierda
+        if (this.keys.d) this.velocity.add(right);    // Derecha
+
+        // Normalizar la velocidad para que no sea más rápida en diagonal
         if (this.velocity.length() > 0) {
             this.velocity.normalize().multiplyScalar(this.moveSpeed * deltaTime);
             this.model.position.add(this.velocity);
         }
-    
-        // Emitir estado al servidor
-        socket.emit('updatePlayerState', {
-            position: { x: this.model.position.x, y: this.model.position.y, z: this.model.position.z },
-            rotation: { x: this.model.rotation.x, y: this.model.rotation.y, z: this.model.rotation.z },
-        });
-    
-        // Actualizar la cámara y animaciones
+
+        // Manejo de salto
+        if (this.isJumping) {
+            this.velocityY += this.gravity * deltaTime; // Aplicar gravedad
+            this.model.position.y += this.velocityY * deltaTime; // Actualizar posición en Y
+
+            // Verificar si el jugador ha caído al suelo
+            if (this.model.position.y <= .5) { // Suponiendo que 1 es la altura del suelo
+                this.model.position.y = 1; // Ajustar la posición al suelo
+                this.isJumping = false; // El jugador ya no está saltando
+                this.velocityY = 1; // Reiniciar la velocidad vertical
+            }
+        }
+
+        // Actualiza las animaciones
+        if (this.animations) {
+            this.animations.update(deltaTime);
+        }
+
+        // Decide qué animación reproducir basado en el estado del jugador
+        if (this.isJumping) {
+            this.animations.play('jump');  // Si el jugador está saltando, reproduce la animación de salto
+        } else if (this.velocity.length() > 0) {
+            this.animations.play('run');  // Si el jugador se está moviendo, reproduce la animación de correr
+        } else {
+            this.animations.play('idle');  // Si el jugador está quieto, reproduce la animación de idle
+        }
+
+        // Actualiza la rotación del modelo para que mire hacia donde apunta la cámara
+        this.model.rotation.y = this.yaw;
+
+        // Actualiza la posición de la cámara
         this.updateCameraPosition();
-        if (this.animations) this.animations.update(deltaTime);
     }
-    
 
     updateCameraPosition() {
         const offsetX = Math.sin(this.yaw) * this.cameraOffset.z + Math.cos(this.yaw) * this.cameraOffset.x;
