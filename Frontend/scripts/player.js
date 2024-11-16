@@ -11,7 +11,7 @@ export class Player {
         this.moveSpeed = 7;
 
         //Camara
-        this.cameraOffset = new THREE.Vector3(0, 5.5, -3);
+        this.cameraOffset = new THREE.Vector3(0, 3, -3);
         this.cameraLookAtOffset = new THREE.Vector3(0, 4.5, 0);
 
         this.mouseSensitivity = 0.001;
@@ -38,7 +38,7 @@ export class Player {
             (object) => {
                 this.model = object;
                 this.model.scale.set(.03, .03, .03);
-                this.model.position.set(0, 3, 0);
+                this.model.position.set(0, 1, 0);
                 this.loadTexture();
                 this.animations = new PlayerAnimations(this.model);
                 this.loadAnimations();
