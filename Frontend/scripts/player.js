@@ -191,9 +191,6 @@ export class Player {
 
         // Actualiza la posición de la cámara
         this.updateCameraPosition();
-        
-        // Emitir la posición actual del jugador
-        socket.emit('updatePosition', { x: this.model.position.x, y: this.model.position.y, z: this.model.position.z });
     }
 
     updateCameraPosition() {

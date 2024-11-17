@@ -106,13 +106,4 @@ export default class GameScene {
     getPlayerById(id) {
         return this.players.find(player => player.id === id);
     }
-
-    // scene.js
-    removePlayer(id) {
-        const index = this.players.findIndex(player => player.id === id);
-        if (index !== -1) {
-            this.scene.remove(this.players[index].model); // Elimina el modelo de la escena
-            this.players.splice(index, 1); // Elimina el jugador del array
-        }
-    }
 }
