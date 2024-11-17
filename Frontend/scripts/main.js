@@ -94,7 +94,13 @@ function setupSocketListeners() {
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
         console.log('Jugadores en la sala:', players);
-    });
+        players.forEach(playerData => {
+            // Si el jugador no está ya en la escena, lo agregamos
+            if (!this.players[playerData.id]) {
+                this.addPlayer(playerData);
+            }
+        });
+    });    
 
     // main.js
     socket.on('playerPositionUpdated', ({ id, position }) => {

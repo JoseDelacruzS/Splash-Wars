@@ -12,6 +12,7 @@ export default class GameScene {
         this.player = null;
         this.hud = new HUD();
         this.map = null;
+        this.players = {};  // Agregado a GameScene
 
         this.init();
         this.animate();

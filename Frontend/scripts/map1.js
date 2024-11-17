@@ -56,7 +56,7 @@ export class Map {
 
     setupAudio() {
         const audioLoader = new THREE.AudioLoader();
-        audioLoader.load('./assets/sounds/music/Musica1.mp3', (buffer) => {
+        audioLoader.load('../assets/sounds/music/Musica1.mp3', (buffer) => {
             this.backgroundMusic.setBuffer(buffer);
             this.backgroundMusic.setLoop(true);
             this.backgroundMusic.setVolume(0.5); // Cambiado a un valor entre 0 y 1
