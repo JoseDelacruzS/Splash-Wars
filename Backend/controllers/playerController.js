@@ -1,30 +1,40 @@
-// controllers/playerController.js
 const players = {}; // Objeto para almacenar jugadores conectados
 
 const playerController = {};
+
+// Función para formatear los datos del jugador
+const formatPlayerData = (id) => ({
+    id,
+    name: players[id]?.name || "Unknown",
+    position: players[id]?.position || { x: 0, y: 0, z: 0 },
+    health: players[id]?.health || 100,
+});
 
 // Inicializar un nuevo jugador
 playerController.initPlayer = (socket) => {
     players[socket.id] = {
         id: socket.id,
-        health: 100,
-        position: { x: 0, y: 0, z: 0 },
-        score: 0
+        position: { x: 0, y: 1, z: 0 }, // Posición inicial
+        health: 100, // Salud inicial
     };
 
-    socket.emit('playerInitialized', players[socket.id]);
+    // Enviar al jugador los datos iniciales
+    socket.emit('playerInitialized', formatPlayerData(socket.id));
     console.log(`Jugador inicializado: ${socket.id}`);
 
     // Emitir evento a todos los demás jugadores para que agreguen al nuevo jugador
-    socket.broadcast.emit('newPlayer', players[socket.id]);
+    socket.broadcast.emit('newPlayer', formatPlayerData(socket.id));
 
     // Actualizar posición del jugador
     socket.on('updatePosition', (position) => {
         if (players[socket.id]) {
             players[socket.id].position = position;
-            socket.broadcast.emit('playerPositionUpdated', { id: socket.id, position });
-            // Emitir la posición de todos los jugadores
-            io.emit('updateAllPositions', players);
+            const roomId = Object.keys(rooms).find(roomId =>
+                rooms[roomId].some(player => player.id === socket.id)
+            );
+            if (roomId) {
+                socket.broadcast.to(roomId).emit('playerPositionUpdated', formatPlayerData(socket.id));
+            }
         }
     });
 
@@ -39,7 +49,6 @@ playerController.initPlayer = (socket) => {
             }
         }
     });
-
 };
 
 // Eliminar jugador al desconectarse
@@ -55,7 +64,5 @@ playerController.playerKilled = (socket, player) => {
     socket.emit('playerKilled');
     console.log(`Jugador ${player.id} ha sido eliminado`);
 };
-
-
 
 module.exports = playerController;
