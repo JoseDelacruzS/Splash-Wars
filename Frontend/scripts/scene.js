@@ -93,26 +93,15 @@ export default class GameScene {
         this.render();
     }
 
-    getPlayerById(playerId) {
-        return this.scene.children.find((child) => child.userData?.id === playerId);
-    }
-    
+    // scene.js
     addPlayer(playerData) {
-        const loader = new THREE.FBXLoader();
-        loader.load('../assets/models/Player/source/little_boy_2.fbx', (object) => {
-            object.scale.set(0.03, 0.03, 0.03);
-            object.position.set(playerData.position.x, playerData.position.y, playerData.position.z);
-            object.userData = { id: playerData.id, name: playerData.name }; // Asocia el ID
-            this.scene.add(object);
-        });
+        const player = new Player(this.scene, this.camera); // Crear un nuevo objeto Player
+        player.model.position.set(playerData.position.x, playerData.position.y, playerData.position.z); // Establecer la posición inicial
+        this.players.push(player); // Asegúrate de tener un array para almacenar los jugadores
     }
-    removeDisconnectedPlayers(players) {
-        const activeIds = players.map((p) => p.id);
-        this.scene.children.forEach((child) => {
-            if (child.userData?.id && !activeIds.includes(child.userData.id)) {
-                this.scene.remove(child);
-            }
-        });
+
+    // scene.js
+    getPlayerById(id) {
+        return this.players.find(player => player.id === id);
     }
-    
 }

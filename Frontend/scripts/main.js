@@ -97,20 +97,11 @@ function setupSocketListeners() {
     });
 
     // main.js
-    socket.on('playersList', (players) => {
-        console.log('Jugadores en la sala:', players);
-    
-        // Actualizar la lista de jugadores en la escena
-        players.forEach((playerData) => {
-            let existingPlayer = gameScene.getPlayerById(playerData.id);
-            if (!existingPlayer && playerData.id !== socket.id) {
-                // Si el jugador no existe y no es el jugador local, se agrega
-                gameScene.addPlayer(playerData);
-            }
-        });
-    
-        // Eliminar jugadores que ya no están en la lista
-        gameScene.removeDisconnectedPlayers(players);
+    socket.on('playerPositionUpdated', ({ id, position }) => {
+        const player = gameScene.getPlayerById(id); // Debes implementar getPlayerById en GameScene
+        if (player) {
+            player.updatePosition(position); // Actualiza la posición del jugador
+        }
     });
 }
 
@@ -131,14 +122,9 @@ function animate() {
 
 // Función de actualización del juego (Lógica adicional aquí)
 function update() {
-    if (gameScene.player) {
-        socket.emit('updatePlayerState', {
-            id: socket.id,
-            position: gameScene.player.model.position
-        });
-    }
+    // Emitir el estado actual si es necesario (como posición o eventos de disparo)
+    socket.emit('updatePlayerState', { life: playerLife, ammo, timeLeft });
 }
-
 
 // Ajustar tamaño de la ventana
 function onWindowResize() {
