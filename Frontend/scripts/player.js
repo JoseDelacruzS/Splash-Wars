@@ -73,12 +73,8 @@ export class Player {
 
     // player.js
     updatePosition(position) {
-        if (this.model) {
-            this.model.position.set(position.x, position.y, position.z);
-        }
+        this.model.position.set(position.x, position.y, position.z);
     }
-    
-    
     setupKeyboardControls() {
         this.keys = {
             w: false,
@@ -235,5 +231,5 @@ export class Player {
         this.animations.loadAnimation('run', '../animations/player/Pistol Run.fbx');
         this.animations.loadAnimation('jump', '../animations/player/Pistol Jump.fbx');
         // Añade más animaciones según sea necesario
-    }    
+    }
 }

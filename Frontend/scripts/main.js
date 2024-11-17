@@ -16,14 +16,14 @@ const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com');
 function generateRandomName() {
     const names = ['Player', 'Warrior', 'Hunter', 'Ninja', 'Ghost', 'Falcon', 'Viper', 'Phoenix', 'Shadow'];
     const randomNumber = Math.floor(Math.random() * names.length);
-    return `${names[randomNumber]}${Math.floor(Math.random() * 1000)}`; // Nombre único
+    return names[randomNumber] + Math.floor(Math.random() * 1000); // Para hacerlo más único
 }
 
 // Función para unirse a una sala con nombre aleatorio
 function joinRandomRoom() {
-    const roomId = 'room1'; // Puedes hacerlo dinámico si lo necesitas
-    const playerName = generateRandomName();
-    socket.emit('joinRoom', roomId, playerName); // Emitir evento para unirse a la sala
+    const roomId = 'room1';  // O puedes hacer que sea dinámico, por ejemplo, generar un ID de sala
+    const playerName = generateRandomName();  // Genera un nombre aleatorio para el jugador
+    socket.emit('joinRoom', roomId, playerName); // Emitir el evento de unirse a la sala con el nombre aleatorio
 }
 
 // Inicialización
@@ -32,24 +32,18 @@ function init() {
     gameScene = new GameScene();
     hud = new HUD();
 
-    // Validar inicialización
-    if (!gameScene || !hud) {
-        console.error('Error al inicializar la escena o el HUD');
-        return;
-    }
-
     // Unirse a la sala con nombre aleatorio
     joinRandomRoom();
 
     // Escuchar eventos del servidor
     setupSocketListeners();
 
-    // Configurar eventos y comenzar el ciclo de animación
+    // Eventos y render loop
     window.addEventListener('resize', onWindowResize, false);
     animate();
 }
 
-// Configurar los listeners de Socket.IO
+// Función para configurar los listeners de Socket.IO
 function setupSocketListeners() {
     // Confirmar conexión
     socket.on('connect', () => {
@@ -58,94 +52,83 @@ function setupSocketListeners() {
 
     // Evento para un nuevo jugador
     socket.on('newPlayer', (playerData) => {
-        if (gameScene) {
-            console.log('Nuevo jugador conectado:', playerData);
-            gameScene.addPlayer(playerData);
-        }
+        console.log('Nuevo jugador conectado:', playerData);
+        gameScene.addPlayer(playerData); // Llama a la función para agregar el jugador a la escena
     });
 
-    // Lista inicial de jugadores
-    socket.on('playersList', (players) => {
-        console.log('Jugadores en la sala:', players);
-        players.forEach(player => {
-            if (player.id !== socket.id && gameScene) {
-                gameScene.addPlayer(player);
-            }
-        });
-    });
-
-    // Actualización de la posición del jugador
-    socket.on('playerPositionUpdated', ({ id, position }) => {
-        if (gameScene) {
-            const player = gameScene.getPlayerById(id);
-            if (player) {
-                player.updatePosition(position);
-            }
-        }
+    // Evento de inicio del juego
+    socket.on('gameStarted', () => {
+        console.log('El juego ha comenzado');
+        // Opcional: Iniciar lógica específica del juego
     });
 
     // Actualización de la vida del jugador
     socket.on('healthUpdated', (newHealth) => {
         playerLife = newHealth;
-        if (hud) hud.updateLife(playerLife);
+        hud.updateLife(playerLife);
     });
 
     // Evento de munición recargada
     socket.on('ammoReloaded', () => {
-        ammo = 15; // Restablecer munición
-        if (hud) hud.updateAmmo(ammo);
+        ammo = 15; // Restablece la munición
+        hud.updateAmmo(ammo);
     });
 
     // Evento de tiempo restante
     socket.on('timeUpdated', (newTimeLeft) => {
         timeLeft = newTimeLeft;
-        if (hud) hud.updateTimer(timeLeft);
+        hud.updateTimer(timeLeft);
     });
 
     // Evento de eliminación del jugador
     socket.on('playerKilled', () => {
         console.log('Has sido eliminado');
-        // Lógica para finalizar el juego o mostrar pantalla de "game over"
+        // Lógica para terminar el juego o mostrar pantalla de "game over"
     });
 
-    // Evento general del servidor
+    // Evento de mensaje general desde el servidor
     socket.on('message', (message) => {
         console.log(message);
+    });
+
+    // Actualización de la lista de jugadores
+    socket.on('playersList', (players) => {
+        console.log('Jugadores en la sala:', players);
+    });
+
+    // main.js
+    socket.on('playerPositionUpdated', ({ id, position }) => {
+        const player = gameScene.getPlayerById(id); // Debes implementar getPlayerById en GameScene
+        if (player) {
+            player.updatePosition(position); // Actualiza la posición del jugador
+        }
     });
 }
 
 // Actualizar HUD
 function updateHUD() {
-    if (hud) {
-        hud.updateLife(playerLife);
-        hud.updateTimer(timeLeft);
-        hud.updateAmmo(ammo);
-    }
+    hud.updateLife(playerLife);
+    hud.updateTimer(timeLeft);
+    hud.updateAmmo(ammo);
 }
 
 // Ciclo de animación
 function animate() {
     requestAnimationFrame(animate);
     update();
-    if (gameScene) gameScene.render();
+    gameScene.render();
     updateHUD();
 }
 
-// Actualizar lógica del juego
+// Función de actualización del juego (Lógica adicional aquí)
 function update() {
-    if (gameScene && gameScene.player) {
-        const position = {
-            x: gameScene.player.model.position.x,
-            y: gameScene.player.model.position.y,
-            z: gameScene.player.model.position.z,
-        };
-        socket.emit('updatePlayerPosition', position); // Enviar posición al servidor
-    }
+    // Emitir el estado actual si es necesario (como posición o eventos de disparo)
+    socket.emit('updatePlayerState', { life: playerLife, ammo, timeLeft });
 }
 
 // Ajustar tamaño de la ventana
 function onWindowResize() {
-    if (gameScene) gameScene.onWindowResize();
+    gameScene.onWindowResize();
 }
 
 // Ejecutar init cuando el DOM esté cargado
