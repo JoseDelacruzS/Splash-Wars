@@ -94,6 +94,9 @@ function setupSocketListeners() {
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
         console.log('Jugadores en la sala:', players);
+        players.forEach(playerData => {
+            gameScene.addPlayer(playerData); // Agregar cada jugador a la escena
+        });
     });
 
     // main.js
@@ -102,6 +105,13 @@ function setupSocketListeners() {
         if (player) {
             player.updatePosition(position); // Actualiza la posición del jugador
         }
+    });
+
+    // main.js
+    socket.on('disconnect', () => {
+        console.log('Te has desconectado');
+        // Aquí puedes eliminar el jugador de la escena si es necesario
+        gameScene.removePlayer(socket.id); // Implementa removePlayer en GameScene
     });
 }
 

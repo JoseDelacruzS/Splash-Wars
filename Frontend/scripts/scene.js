@@ -5,6 +5,7 @@ import { Player } from './player.js';
 
 export default class GameScene {
     constructor() {
+        this.players = [];
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 1000);
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -97,11 +98,21 @@ export default class GameScene {
     addPlayer(playerData) {
         const player = new Player(this.scene, this.camera); // Crear un nuevo objeto Player
         player.model.position.set(playerData.position.x, playerData.position.y, playerData.position.z); // Establecer la posición inicial
-        this.players.push(player); // Asegúrate de tener un array para almacenar los jugadores
+        player.id = playerData.id; // Asignar el ID al jugador
+        this.players.push(player); // Almacenar el jugador en el array
     }
 
     // scene.js
     getPlayerById(id) {
         return this.players.find(player => player.id === id);
+    }
+
+    // scene.js
+    removePlayer(id) {
+        const index = this.players.findIndex(player => player.id === id);
+        if (index !== -1) {
+            this.scene.remove(this.players[index].model); // Elimina el modelo de la escena
+            this.players.splice(index, 1); // Elimina el jugador del array
+        }
     }
 }
