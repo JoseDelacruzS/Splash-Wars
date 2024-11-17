@@ -92,4 +92,16 @@ export default class GameScene {
         this.update();
         this.render();
     }
+
+    // scene.js
+    addPlayer(playerData) {
+        const player = new Player(this.scene, this.camera); // Crear un nuevo objeto Player
+        player.model.position.set(playerData.position.x, playerData.position.y, playerData.position.z); // Establecer la posición inicial
+        this.players.push(player); // Asegúrate de tener un array para almacenar los jugadores
+    }
+
+    // scene.js
+    getPlayerById(id) {
+        return this.players.find(player => player.id === id);
+    }
 }

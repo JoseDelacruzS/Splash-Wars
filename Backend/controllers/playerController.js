@@ -15,6 +15,9 @@ playerController.initPlayer = (socket) => {
     socket.emit('playerInitialized', players[socket.id]);
     console.log(`Jugador inicializado: ${socket.id}`);
 
+     // Emitir evento a todos los demás jugadores para que agreguen al nuevo jugador
+     socket.broadcast.emit('newPlayer', players[socket.id]);
+
     // Actualizar posición del jugador
     socket.on('updatePosition', (position) => {
         if (players[socket.id]) {

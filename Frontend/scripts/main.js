@@ -50,6 +50,12 @@ function setupSocketListeners() {
         console.log('Conectado al servidor con ID:', socket.id);
     });
 
+    // Evento para un nuevo jugador
+    socket.on('newPlayer', (playerData) => {
+        console.log('Nuevo jugador conectado:', playerData);
+        gameScene.addPlayer(playerData); // Llama a la función para agregar el jugador a la escena
+    });
+
     // Evento de inicio del juego
     socket.on('gameStarted', () => {
         console.log('El juego ha comenzado');

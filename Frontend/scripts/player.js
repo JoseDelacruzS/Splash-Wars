@@ -11,7 +11,7 @@ export class Player {
         this.moveSpeed = 7;
 
         //Camara
-        this.cameraOffset = new THREE.Vector3(0, 5.5, -3);
+        this.cameraOffset = new THREE.Vector3(0, 3, -3);
         this.cameraLookAtOffset = new THREE.Vector3(0, 4.5, 0);
 
         this.mouseSensitivity = 0.001;
@@ -20,11 +20,11 @@ export class Player {
         this.PlayerAnimations = null;
 
         //Salto
-        this.isJumping = false; 
+        this.isJumping = false;
         this.jumpVelocity = 5;
-        this.gravity = -9.81; 
-        this.velocityY = 10; 
-        this.jumpHeight = 100; 
+        this.gravity = -9.81;
+        this.velocityY = 10;
+        this.jumpHeight = 100;
 
         this.loadModel();
         this.setupKeyboardControls();
@@ -71,6 +71,10 @@ export class Player {
         });
     }
 
+    // player.js
+    updatePosition(position) {
+        this.model.position.set(position.x, position.y, position.z);
+    }
     setupKeyboardControls() {
         this.keys = {
             w: false,
