@@ -95,6 +95,14 @@ function setupSocketListeners() {
     socket.on('playersList', (players) => {
         console.log('Jugadores en la sala:', players);
     });
+
+    // main.js
+    socket.on('playerPositionUpdated', ({ id, position }) => {
+        const player = gameScene.getPlayerById(id); // Debes implementar getPlayerById en GameScene
+        if (player) {
+            player.updatePosition(position); // Actualiza la posición del jugador
+        }
+    });
 }
 
 // Actualizar HUD
