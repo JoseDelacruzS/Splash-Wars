@@ -5,7 +5,6 @@ import { Player } from './player.js';
 
 export default class GameScene {
     constructor() {
-        this.players = [];
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 1000);
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -94,16 +93,26 @@ export default class GameScene {
         this.render();
     }
 
-    // scene.js
+    getPlayerById(playerId) {
+        return this.scene.children.find((child) => child.userData?.id === playerId);
+    }
+    
     addPlayer(playerData) {
-        const player = new Player(this.scene, this.camera); // Crear un nuevo objeto Player
-        player.model.position.set(playerData.position.x, playerData.position.y, playerData.position.z); // Establecer la posición inicial
-        player.id = playerData.id; // Asignar el ID al jugador
-        this.players.push(player); // Almacenar el jugador en el array
+        const loader = new THREE.FBXLoader();
+        loader.load('../assets/models/Player/source/little_boy_2.fbx', (object) => {
+            object.scale.set(0.03, 0.03, 0.03);
+            object.position.set(playerData.position.x, playerData.position.y, playerData.position.z);
+            object.userData = { id: playerData.id, name: playerData.name }; // Asocia el ID
+            this.scene.add(object);
+        });
     }
-
-    // scene.js
-    getPlayerById(id) {
-        return this.players.find(player => player.id === id);
+    removeDisconnectedPlayers(players) {
+        const activeIds = players.map((p) => p.id);
+        this.scene.children.forEach((child) => {
+            if (child.userData?.id && !activeIds.includes(child.userData.id)) {
+                this.scene.remove(child);
+            }
+        });
     }
+    
 }

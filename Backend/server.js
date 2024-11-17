@@ -80,6 +80,11 @@ io.on('connection', (socket) => {
     // ...
 });
 
+io.to(roomId).emit('playersList', room.map((player) => ({
+    id: player.id,
+    name: player.name,
+    position: player.position || { x: 0, y: 0, z: 0 } // Posición inicial
+})));
 
 // Inicia el servidor escuchando en todas las interfaces de red (0.0.0.0)
 const port = process.env.PORT;

@@ -37,6 +37,13 @@ playerController.initPlayer = (socket) => {
             }
         }
     });
+        
+    socket.on('playerPositionUpdated', ({ id, position }) => {
+        const player = gameScene.getPlayerById(id);
+        if (player) {
+            player.position.set(position.x, position.y, position.z); // Actualiza la posición
+        }
+    });
     
 };
 
