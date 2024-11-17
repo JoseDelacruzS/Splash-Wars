@@ -32,23 +32,29 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', (roomId, playerName) => {
         const room = rooms[roomId] || [];
         
-        if (room.length < 6) {  // Si hay espacio en la sala
-            room.push({ id: socket.id, name: playerName });
+        const newPlayer = { 
+            id: socket.id, 
+            name: playerName, 
+            position: { x: 0, y: 1, z: 0 } // Posición inicial
+        };
+    
+        if (room.length < 6) {
+            room.push(newPlayer);
             rooms[roomId] = room;
-
-            // Unir al jugador a la sala
+    
             socket.join(roomId);
             console.log(`${playerName} se unió a la sala ${roomId}`);
-
-            // Enviar un mensaje a todos los jugadores en la sala
-            io.to(roomId).emit('message', `${playerName} se ha unido al juego`);
-
-            // Enviar la lista de jugadores en la sala
-            io.to(roomId).emit('playersList', room);
+    
+            // Emitir al nuevo jugador a todos los demás
+            socket.to(roomId).emit('newPlayer', newPlayer);
+    
+            // Enviar el estado actual de la sala al jugador nuevo
+            socket.emit('playersList', room);
         } else {
             socket.emit('message', 'La sala está llena. Intenta con otra.');
         }
     });
+    
 
     // Cuando un jugador desconecta
     socket.on('disconnect', () => {
@@ -76,8 +82,13 @@ io.on('connection', (socket) => {
         }
     });
 
-    // Otras funciones relacionadas con el juego
-    // ...
+    socket.on('updatePlayerPosition', (position) => {
+        const roomId = Object.keys(socket.rooms).find((room) => room !== socket.id);
+        if (roomId) {
+            socket.to(roomId).emit('playerPositionUpdated', { id: socket.id, position });
+        }
+    });
+    
 });
 
 

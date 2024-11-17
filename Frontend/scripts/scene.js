@@ -12,6 +12,7 @@ export default class GameScene {
         this.player = null;
         this.hud = new HUD();
         this.map = null;
+        this.players = new Map(); // Mapa para jugadores
 
         this.init();
         this.animate();
@@ -95,13 +96,16 @@ export default class GameScene {
 
     // scene.js
     addPlayer(playerData) {
-        const player = new Player(this.scene, this.camera); // Crear un nuevo objeto Player
-        player.model.position.set(playerData.position.x, playerData.position.y, playerData.position.z); // Establecer la posición inicial
-        this.players.push(player); // Asegúrate de tener un array para almacenar los jugadores
+        if (!this.players.has(playerData.id)) {
+            const newPlayer = new Player(this.scene, this.camera);
+            newPlayer.updatePosition(playerData.position);
+            this.players.set(playerData.id, newPlayer);
+            console.log(`Jugador ${playerData.name} agregado a la escena`);
+        }
     }
-
-    // scene.js
+    
     getPlayerById(id) {
-        return this.players.find(player => player.id === id);
+        return this.players.get(id);
     }
+    
 }
