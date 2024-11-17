@@ -22,9 +22,9 @@ export class Map {
         this.init();
     }
 
-    init() {
+    async init() {
         try {
-            this.loadStage();
+            await this.loadStage();
             this.addSkydome();
             this.addPlane();
             this.setupAudio();
@@ -33,34 +33,31 @@ export class Map {
         }
     }
 
-    addSkydome() {
+    async addSkydome() {
         try {
             const skydomeGeometry = new THREE.SphereGeometry(500, 60, 40);
-            const skyTexture = new THREE.TextureLoader().load(
-                '../assets/images/cielo.png',
-                () => console.log("Textura del cielo cargada correctamente."),
-                undefined,
-                (error) => console.error("Error al cargar la textura del cielo:", error)
-            );
+            const skyTexture = await this.loadTexture('../assets/images/cielo.png');
             const skydomeMaterial = new THREE.MeshBasicMaterial({
                 map: skyTexture,
                 side: THREE.BackSide
             });
+
             this.skydomeMesh = new THREE.Mesh(skydomeGeometry, skydomeMaterial);
             this.scene.add(this.skydomeMesh);
 
             // Rotación
             this.skydomeRotationSpeed = 0.00008;
-            const animateSkydome = () => {
-                requestAnimationFrame(animateSkydome);
-                this.skydomeMesh.rotation.y += this.skydomeRotationSpeed;
-                if (this.skydomeMesh.rotation.y > Math.PI * 2 || this.skydomeMesh.rotation.y < 0) {
-                    this.skydomeRotationSpeed = -this.skydomeRotationSpeed;
-                }
-            };
-            animateSkydome();
+            this.animateSkydome();
         } catch (error) {
             console.error("Error al agregar el Skydome:", error);
+        }
+    }
+
+    animateSkydome() {
+        requestAnimationFrame(() => this.animateSkydome());
+        this.skydomeMesh.rotation.y += this.skydomeRotationSpeed;
+        if (this.skydomeMesh.rotation.y > Math.PI * 2 || this.skydomeMesh.rotation.y < 0) {
+            this.skydomeRotationSpeed = -this.skydomeRotationSpeed;
         }
     }
 
@@ -100,28 +97,45 @@ export class Map {
         }
     }
 
-    loadStage() {
+    // Usamos una función async para cargar texturas
+    loadTexture(url) {
+        return new Promise((resolve, reject) => {
+            new THREE.TextureLoader().load(
+                url,
+                resolve, // Si carga bien, resolver la promesa con la textura
+                undefined,
+                reject // Si hay error, rechazar la promesa
+            );
+        });
+    }
+
+    async loadStage() {
         try {
             const loader = new GLTFLoader();
+            const gltf = await this.loadGLTFModel('../assets/models/scenarios/low_poly_city/city.glb');
+            console.log('Modelo cargado con éxito:', gltf);
+            const stage = gltf.scene;
+            stage.scale.set(12, 12, 12);
+            stage.position.set(0, 0, 0);
+            this.scene.add(stage); // Agrega el escenario a la escena
+        } catch (error) {
+            console.error('Error al cargar el escenario:', error);
+        }
+    }
+
+    // Usamos una función async para cargar el modelo GLTF
+    loadGLTFModel(url) {
+        return new Promise((resolve, reject) => {
+            const loader = new GLTFLoader();
             loader.load(
-                '../assets/models/scenarios/low_poly_city/city.glb',
-                (gltf) => {
-                    console.log('Modelo cargado con éxito:', gltf);
-                    const stage = gltf.scene;
-                    stage.scale.set(12, 12, 12);
-                    stage.position.set(0, 0, 0);
-                    this.scene.add(stage); // Agrega el escenario a la escena
-                },
+                url,
+                resolve,
                 (xhr) => {
                     console.log((xhr.loaded / xhr.total) * 100 + '% cargado');
                 },
-                (error) => {
-                    console.error('Error al cargar el modelo:', error);
-                }
+                reject
             );
-        } catch (error) {
-            console.error("Error al cargar el escenario:", error);
-        }
+        });
     }
 
     update() {
