@@ -94,13 +94,12 @@ function setupSocketListeners() {
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
         console.log('Jugadores en la sala:', players);
-        players.forEach(playerData => {
-            // Si el jugador no está ya en la escena, lo agregamos
-            if (!this.players[playerData.id]) {
-                this.addPlayer(playerData);
+        players.forEach((player) => {
+            if (!gameScene.getPlayerById(player.id)) {
+                gameScene.addPlayer(player); // Agrega al jugador si no existe
             }
         });
-    });    
+    });
 
     // main.js
     socket.on('playerPositionUpdated', ({ id, position }) => {
@@ -109,6 +108,32 @@ function setupSocketListeners() {
             player.updatePosition(position); // Actualiza la posición del jugador
         }
     });
+
+    socket.on('updateAllPositions', (playersData) => {
+        Object.keys(playersData).forEach((id) => {
+            const playerData = playersData[id];
+            if (id !== socket.id) {
+                // No actualizar la posición propia, ya que eso se maneja localmente
+                const player = gameScene.getPlayerById(id);
+                if (player) {
+                    player.model.position.set(
+                        playerData.position.x,
+                        playerData.position.y,
+                        playerData.position.z
+                    );
+                } else {
+                    gameScene.addPlayer(playerData); // Agregar nuevo jugador si no existe
+                }
+            }
+        });
+    });
+    
+    socket.on('playerDisconnected', (playerId) => {
+        const player = gameScene.getPlayerById(playerId);
+        if (player) {
+            gameScene.removePlayer(playerId); // Implementa esta función en `scene.js`
+        }
+    });    
 }
 
 // Actualizar HUD
@@ -128,8 +153,10 @@ function animate() {
 
 // Función de actualización del juego (Lógica adicional aquí)
 function update() {
-    // Emitir el estado actual si es necesario (como posición o eventos de disparo)
-    socket.emit('updatePlayerState', { life: playerLife, ammo, timeLeft });
+    if (gameScene.player) {
+        const position = gameScene.player.model.position;
+        socket.emit('updatePosition', { x: position.x, y: position.y, z: position.z });
+    }
 }
 
 // Ajustar tamaño de la ventana

@@ -24,6 +24,9 @@ const io = new Server(server, {
 // Creamos un objeto para gestionar las salas
 const rooms = {};
 
+//Creamos un obejto para los jugadores
+const players = {};
+
 // Configuración de conexión de Socket.IO
 io.on('connection', (socket) => {
     console.log('Un jugador se conectó:', socket.id);
@@ -39,6 +42,12 @@ io.on('connection', (socket) => {
             // Unir al jugador a la sala
             socket.join(roomId);
             console.log(`${playerName} se unió a la sala ${roomId}`);
+
+            // Crear el estado inicial del jugador
+            players[socket.id] = {
+                name: playerName,
+                position: { x: 0, y: 1, z: 0 } // Posición inicial
+            };
 
             // Enviar un mensaje a todos los jugadores en la sala
             io.to(roomId).emit('message', `${playerName} se ha unido al juego`);
