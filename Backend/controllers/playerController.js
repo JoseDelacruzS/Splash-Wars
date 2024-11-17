@@ -15,14 +15,16 @@ playerController.initPlayer = (socket) => {
     socket.emit('playerInitialized', players[socket.id]);
     console.log(`Jugador inicializado: ${socket.id}`);
 
-     // Emitir evento a todos los demás jugadores para que agreguen al nuevo jugador
-     socket.broadcast.emit('newPlayer', players[socket.id]);
+    // Emitir evento a todos los demás jugadores para que agreguen al nuevo jugador
+    socket.broadcast.emit('newPlayer', players[socket.id]);
 
     // Actualizar posición del jugador
     socket.on('updatePosition', (position) => {
         if (players[socket.id]) {
             players[socket.id].position = position;
             socket.broadcast.emit('playerPositionUpdated', { id: socket.id, position });
+            // Emitir la posición de todos los jugadores
+            io.emit('updateAllPositions', players);
         }
     });
 
@@ -37,7 +39,7 @@ playerController.initPlayer = (socket) => {
             }
         }
     });
-    
+
 };
 
 // Eliminar jugador al desconectarse

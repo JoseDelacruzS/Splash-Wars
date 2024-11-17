@@ -34,6 +34,9 @@ io.on('connection', (socket) => {
     // Cuando un jugador se une a una sala
     socket.on('joinRoom', (roomId, playerName) => {
         const room = rooms[roomId] || [];
+        const playerId = socket.id;
+        const position = { x: 0, y: 1, z: 0 }; // Posición inicial
+        const playerData = { id: playerId, name: playerName, position };
         
         if (room.length < 6) {  // Si hay espacio en la sala
             room.push({ id: socket.id, name: playerName });
@@ -45,8 +48,10 @@ io.on('connection', (socket) => {
 
             // Crear el estado inicial del jugador
             players[socket.id] = {
-                name: playerName,
-                position: { x: 0, y: 1, z: 0 } // Posición inicial
+                id: socket.id,
+                health: 100,
+                position: { x: 0, y: 1, z: 0 }, // Posición inicial válida
+                score: 0
             };
 
             // Enviar un mensaje a todos los jugadores en la sala

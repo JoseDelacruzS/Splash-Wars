@@ -165,7 +165,7 @@ export class Player {
             this.model.position.y += this.velocityY * deltaTime; // Actualizar posición en Y
 
             // Verificar si el jugador ha caído al suelo
-            if (this.model.position.y <= .5) { // Suponiendo que 1 es la altura del suelo
+            if (this.model.position.y <= 3) { // Suponiendo que 1 es la altura del suelo
                 this.model.position.y = 1; // Ajustar la posición al suelo
                 this.isJumping = false; // El jugador ya no está saltando
                 this.velocityY = 1; // Reiniciar la velocidad vertical

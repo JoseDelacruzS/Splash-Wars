@@ -94,17 +94,23 @@ export default class GameScene {
         this.render();
     }
 
-   // Agrega un jugador a la escena
-   addPlayer(playerData) {
-    const player = new Player(this.scene, this.camera);
-    player.model.position.set(
-        playerData.position.x,
-        playerData.position.y,
-        playerData.position.z
-    );
-    player.id = playerData.id; // Identificador único
-    this.players.push(player);
-}
+    // Agrega un jugador a la escena
+    addPlayer(playerData) {
+        if (!playerData || !playerData.position) {
+            console.error('Datos de jugador inválidos:', playerData);
+            return;
+        }
+    
+        // Cargar un modelo nuevo para el jugador
+        const newPlayer = new Player(this.scene, this.camera); // Crea una nueva instancia de Player
+        newPlayer.model.position.set(
+            playerData.position.x,
+            playerData.position.y,
+            playerData.position.z
+        );
+        newPlayer.id = playerData.id; // Identificador único
+        this.players.push(newPlayer); // Añade al array de jugadores
+    }    
 
     // scene.js
     getPlayerById(id) {
@@ -118,5 +124,5 @@ export default class GameScene {
             this.scene.remove(removedPlayer.model); // Elimina el modelo de la escena
         }
     }
-    
+
 }
