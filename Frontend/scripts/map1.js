@@ -3,6 +3,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export class Map {
     constructor(scene, camera) {
+        if (!scene || !(scene instanceof THREE.Scene)) {
+            throw new Error("Se requiere una instancia válida de THREE.Scene para 'scene'.");
+        }
+        if (!camera || !(camera instanceof THREE.Camera)) {
+            throw new Error("Se requiere una instancia válida de THREE.Camera para 'camera'.");
+        }
+
         this.camera = camera;
         this.scene = scene;
         this.skydomeMesh = null;
@@ -10,83 +17,122 @@ export class Map {
         this.audioListener = new THREE.AudioListener();
         this.backgroundMusic = new THREE.Audio(this.audioListener);
 
+        console.log("Inicializando mapa con escena y cámara:", this.scene, this.camera);
+
         this.init();
     }
 
     init() {
-        this.loadStage();
-        this.addSkydome();
-        this.addPlane();
-        this.setupAudio();
+        try {
+            this.loadStage();
+            this.addSkydome();
+            this.addPlane();
+            this.setupAudio();
+        } catch (error) {
+            console.error("Error al inicializar el mapa:", error);
+        }
     }
 
     addSkydome() {
-        const skydomeGeometry = new THREE.SphereGeometry(500, 60, 40);
-        const skyTexture = new THREE.TextureLoader().load('../assets/images/cielo.png');
-        const skydomeMaterial = new THREE.MeshBasicMaterial({
-            map: skyTexture,
-            side: THREE.BackSide
-        });
-        this.skydomeMesh = new THREE.Mesh(skydomeGeometry, skydomeMaterial);
-        this.scene.add(this.skydomeMesh);
+        try {
+            const skydomeGeometry = new THREE.SphereGeometry(500, 60, 40);
+            const skyTexture = new THREE.TextureLoader().load(
+                '../assets/images/cielo.png',
+                () => console.log("Textura del cielo cargada correctamente."),
+                undefined,
+                (error) => console.error("Error al cargar la textura del cielo:", error)
+            );
+            const skydomeMaterial = new THREE.MeshBasicMaterial({
+                map: skyTexture,
+                side: THREE.BackSide
+            });
+            this.skydomeMesh = new THREE.Mesh(skydomeGeometry, skydomeMaterial);
+            this.scene.add(this.skydomeMesh);
 
-        //Rotacion
-        this.skydomeRotationSpeed = 0.00008;
-        const animateSkydome = () => {
-            requestAnimationFrame(animateSkydome);
-            this.skydomeMesh.rotation.y += this.skydomeRotationSpeed;
-            if (this.skydomeMesh.rotation.y > Math.PI * 2 || this.skydomeMesh.rotation.y < 0) {
-                this.skydomeRotationSpeed = -this.skydomeRotationSpeed;
-            }
-        };
-        animateSkydome();
-
+            // Rotación
+            this.skydomeRotationSpeed = 0.00008;
+            const animateSkydome = () => {
+                requestAnimationFrame(animateSkydome);
+                this.skydomeMesh.rotation.y += this.skydomeRotationSpeed;
+                if (this.skydomeMesh.rotation.y > Math.PI * 2 || this.skydomeMesh.rotation.y < 0) {
+                    this.skydomeRotationSpeed = -this.skydomeRotationSpeed;
+                }
+            };
+            animateSkydome();
+        } catch (error) {
+            console.error("Error al agregar el Skydome:", error);
+        }
     }
 
     addPlane() {
-        const planeGeometry = new THREE.PlaneGeometry(600, 600);
-        const edges = new THREE.EdgesGeometry(planeGeometry);
-        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff }); // Color blanco para las líneas
-        const planeLines = new THREE.LineSegments(edges, lineMaterial);
-        planeLines.rotation.x = -Math.PI / 2;
-        planeLines.position.y = 0.3; // Ajusta esto según sea necesario
-        this.scene.add(planeLines);
-        this.planeCollisionBox = new THREE.Box3().setFromObject(planeLines);
+        try {
+            const planeGeometry = new THREE.PlaneGeometry(600, 600);
+            const edges = new THREE.EdgesGeometry(planeGeometry);
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff }); // Color blanco para las líneas
+            const planeLines = new THREE.LineSegments(edges, lineMaterial);
+            planeLines.rotation.x = -Math.PI / 2;
+            planeLines.position.y = 0.3; // Ajusta esto según sea necesario
+            this.scene.add(planeLines);
+            this.planeCollisionBox = new THREE.Box3().setFromObject(planeLines);
+        } catch (error) {
+            console.error("Error al agregar el plano:", error);
+        }
     }
 
     setupAudio() {
-        const audioLoader = new THREE.AudioLoader();
-        audioLoader.load('./assets/sounds/music/Musica1.mp3', (buffer) => {
-            this.backgroundMusic.setBuffer(buffer);
-            this.backgroundMusic.setLoop(true);
-            this.backgroundMusic.setVolume(0.5); // Cambiado a un valor entre 0 y 1
-            this.backgroundMusic.play();
-        }, undefined, (error) => {
-            console.error('Error al cargar el audio:', error);
-        });
+        try {
+            const audioLoader = new THREE.AudioLoader();
+            audioLoader.load(
+                '../assets/sounds/music/Musica1.mp3',
+                (buffer) => {
+                    this.backgroundMusic.setBuffer(buffer);
+                    this.backgroundMusic.setLoop(true);
+                    this.backgroundMusic.setVolume(0.5); // Cambiado a un valor entre 0 y 1
+                    this.backgroundMusic.play();
+                },
+                undefined,
+                (error) => {
+                    console.error('Error al cargar el audio:', error);
+                }
+            );
+        } catch (error) {
+            console.error("Error al configurar el audio:", error);
+        }
     }
 
     loadStage() {
-        const loader = new GLTFLoader(); // O FBXLoader si tu modelo es FBX
-        loader.load(
-            '../assets/models/scenarios/low_poly_city/city.glb', // Cambia esto a la ruta de tu modelo
-            (gltf) => {
-                console.log('Modelo cargado con exito', gltf)
-                const stage = gltf.scene;
-                stage.scale.set(12, 12, 12);
-                stage.position.set(0, 0, 0);
-                this.scene.add(stage); // Agrega el escenario a la escena
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-            },
-            (error) => {
-                console.error('An error happened', error);
-            }
-        );
+        try {
+            const loader = new GLTFLoader();
+            loader.load(
+                '../assets/models/scenarios/low_poly_city/city.glb',
+                (gltf) => {
+                    console.log('Modelo cargado con éxito:', gltf);
+                    const stage = gltf.scene;
+                    stage.scale.set(12, 12, 12);
+                    stage.position.set(0, 0, 0);
+                    this.scene.add(stage); // Agrega el escenario a la escena
+                },
+                (xhr) => {
+                    console.log((xhr.loaded / xhr.total) * 100 + '% cargado');
+                },
+                (error) => {
+                    console.error('Error al cargar el modelo:', error);
+                }
+            );
+        } catch (error) {
+            console.error("Error al cargar el escenario:", error);
+        }
     }
 
     update() {
-        this.audioListener.position.copy(this.camera.position);
+        try {
+            if (this.camera && this.audioListener) {
+                this.audioListener.position.copy(this.camera.position);
+            } else {
+                console.warn("No se puede actualizar la posición del AudioListener: cámara o audioListener no definidos.");
+            }
+        } catch (error) {
+            console.error("Error en el método 'update':", error);
+        }
     }
 }
