@@ -38,7 +38,7 @@ export class Player {
             (object) => {
                 this.model = object;
                 this.model.scale.set(.03, .03, .03);
-                this.model.position.set(0, 1, 0);
+                this.model.position.set(0, 3, 0);
                 this.loadTexture();
                 this.animations = new PlayerAnimations(this.model);
                 this.loadAnimations();
