@@ -9,7 +9,7 @@ export default class GameScene {
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 1000);
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.clock = new THREE.Clock();
-        this.player = null;
+        this.player = new Player(this.scene, this.camera, this);
         this.hud = new HUD();
         this.map = null;
         this.players = [];

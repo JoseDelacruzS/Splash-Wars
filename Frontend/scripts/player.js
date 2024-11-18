@@ -6,6 +6,7 @@ export class Player {
     constructor(scene, camera) {
         this.scene = scene;
         this.camera = camera;
+        this.gameScene = this.gameScene;
         this.model = null;
         this.velocity = new THREE.Vector3();
         this.moveSpeed = 7;
@@ -46,7 +47,7 @@ export class Player {
                 this.updateCameraPosition();
 
                 if (this.model && this.model.position) {
-                    gameScene.addPlayer({ id: this.id, position: this.model.position });
+                    this.gameScene.addPlayer({ id: this.id, position: this.model.position });
                 } else {
                     console.error("El modelo no está cargado completamente o la posición no está definida.");
                 }
