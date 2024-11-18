@@ -44,6 +44,11 @@ export class Player {
                 this.loadAnimations();
                 this.scene.add(this.model);
                 this.updateCameraPosition();
+    
+                // Aquí se puede llamar a la función para agregar el jugador cuando el modelo se ha cargado
+                if (this.id) {
+                    gameScene.addPlayer({ id: this.id, position: this.model.position });
+                }
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
@@ -53,7 +58,7 @@ export class Player {
             }
         );
     }
-
+    
     loadTexture() {
         const textureLoader = new THREE.TextureLoader();
         textureLoader.load('../assets/models/Player/textures/little_boy_2.png', (texture) => {
