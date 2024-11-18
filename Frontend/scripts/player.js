@@ -26,13 +26,16 @@ export class Player {
         this.gravity = -9.81;
         this.velocityY = 10;
         this.jumpHeight = 100;
-
+       
         this.loadModel();
         this.setupKeyboardControls();
         this.setupMouseControls();
     }
 
     loadModel() {
+        if (this.model) {
+            this.scene.remove(this.model);
+        } 
         const loader = new FBXLoader();
         loader.load(
             '../assets/models/Player/source/little_boy_2.fbx',

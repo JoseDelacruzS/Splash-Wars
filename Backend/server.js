@@ -114,6 +114,19 @@ io.on('connection', (socket) => {
             }
         }
     });
+    socket.on('updateAnimation', ({ id, animation }) => {
+        if (players[id]) {
+            players[id].animation = animation;
+    
+            // Difunde el cambio a los demás jugadores en la misma sala
+            const roomId = Object.keys(rooms).find(roomId =>
+                rooms[roomId].some(player => player.id === id)
+            );
+            if (roomId) {
+                socket.broadcast.to(roomId).emit('playerAnimationUpdated', { id, animation });
+            }
+        }
+    });    
 });
 
 const port = process.env.PORT || 3000;
