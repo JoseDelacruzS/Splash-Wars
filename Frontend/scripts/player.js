@@ -150,7 +150,7 @@ export class Player {
         this.velocity.set(0, 0, 0);
 
         const rotationMatrix = new THREE.Matrix4();
-        rotationMatrix.makeRotationY(this.model.rotation.y);
+        rotationMatrix.makeRotationY(this.yaw);  // Usamos yaw para la rotación del modelo
 
         const forward = new THREE.Vector3(0, 0, 1);
         const right = new THREE.Vector3(-1, 0, 0);
@@ -179,21 +179,35 @@ export class Player {
             }
         }
 
-        if (this.animations) {
-            this.animations.update(deltaTime);
-        }
+        // Actualización de las animaciones
+        let currentAnimation = 'idle';
 
         if (this.isJumping) {
-            this.animations.play('jump');
+            currentAnimation = 'jump';
         } else if (this.velocity.length() > 0) {
-            this.animations.play('run');
-        } else {
-            this.animations.play('idle');
+            currentAnimation = 'run';
         }
 
+        // Si la animación ha cambiado, actualizarla
+        if (this.animations && this.animations.currentAnimation !== currentAnimation) {
+            this.animations.play(currentAnimation);
+            // Emitir la animación y rotación al servidor solo cuando cambian
+            socket.emit('updateAnimationAndRotation', {
+                id: socket.id,
+                animation: currentAnimation,
+                rotation: {
+                    x: this.model.rotation.x,
+                    y: this.model.rotation.y,
+                    z: this.model.rotation.z
+                }
+            });
+        }
+
+        // Actualizamos la rotación del modelo del jugador basándonos en 'yaw'
         this.model.rotation.y = this.yaw;
         this.updateCameraPosition();
     }
+
 
     updateCameraPosition() {
         const offsetX = Math.sin(this.yaw) * this.cameraOffset.z + Math.cos(this.yaw) * this.cameraOffset.x;

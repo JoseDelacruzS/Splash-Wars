@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
             socket.emit('message', 'Datos inválidos para unirse a la sala.');
             return;
         }
-        
+
         const room = rooms[roomId] || [];
         const playerId = socket.id;
 
@@ -114,19 +114,24 @@ io.on('connection', (socket) => {
             }
         }
     });
-    socket.on('updateAnimation', ({ id, animation }) => {
+
+    // Actualizar animación y rotación de un jugador
+    socket.on('updateAnimationAndRotation', ({ id, animation, rotation }) => {
         if (players[id]) {
+            // Actualizamos la animación y la rotación en el servidor
             players[id].animation = animation;
-    
-            // Difunde el cambio a los demás jugadores en la misma sala
+            players[id].rotation = rotation;  // Guardamos la rotación
+
+            // Emitir la actualización a los demás jugadores en la sala
             const roomId = Object.keys(rooms).find(roomId =>
                 rooms[roomId].some(player => player.id === id)
             );
             if (roomId) {
-                socket.broadcast.to(roomId).emit('playerAnimationUpdated', { id, animation });
+                socket.broadcast.to(roomId).emit('playerAnimationAndRotationUpdated', { id, animation, rotation });
             }
         }
-    });    
+    });
+
 });
 
 const port = process.env.PORT || 3000;
