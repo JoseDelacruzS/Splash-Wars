@@ -44,7 +44,7 @@ export class Player {
                 this.loadAnimations();
                 this.scene.add(this.model);
                 this.updateCameraPosition();
-    
+
                 // Aquí se puede llamar a la función para agregar el jugador cuando el modelo se ha cargado
                 if (this.id) {
                     gameScene.addPlayer({ id: this.id, position: this.model.position });
@@ -58,7 +58,7 @@ export class Player {
             }
         );
     }
-    
+
     loadTexture() {
         const textureLoader = new THREE.TextureLoader();
         textureLoader.load('../assets/models/Player/textures/little_boy_2.png', (texture) => {
@@ -78,8 +78,14 @@ export class Player {
 
     // player.js
     updatePosition(position) {
+        if (!this.model) {
+            console.warn('Intentando actualizar posición antes de cargar el modelo');
+            return;
+        }
         this.model.position.set(position.x, position.y, position.z);
     }
+
+
     setupKeyboardControls() {
         this.keys = {
             w: false,
