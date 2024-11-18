@@ -31,11 +31,7 @@ const players = {};
 const formatPlayerData = (id) => ({
     id,
     name: players[id]?.name || "Unknown",
-    position: {
-        x: players[id]?.position?.x || 0,
-        y: players[id]?.position?.y || 1,
-        z: players[id]?.position?.z || 0,
-    },
+    position: players[id]?.position || { x: 0, y: 0, z: 0 },
     health: players[id]?.health || 100,
 });
 
@@ -77,12 +73,7 @@ io.on('connection', (socket) => {
 
     // Actualizar posición del jugador
     socket.on('updatePosition', (position) => {
-        if (
-            position &&
-            typeof position.x === 'number' &&
-            typeof position.y === 'number' &&
-            typeof position.z === 'number'
-        ) {
+        if (players[socket.id]) {
             players[socket.id].position = position;
             const roomId = Object.keys(rooms).find(roomId =>
                 rooms[roomId].some(player => player.id === socket.id)
@@ -90,11 +81,8 @@ io.on('connection', (socket) => {
             if (roomId) {
                 socket.broadcast.to(roomId).emit('playerPositionUpdated', formatPlayerData(socket.id));
             }
-        } else {
-            console.warn(`Posición inválida recibida de ${socket.id}:`, position);
         }
     });
-    
 
     // Cuando un jugador desconecta
     socket.on('disconnect', () => {

@@ -120,20 +120,13 @@ function setupSocketListeners() {
 
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
+        console.log('Jugadores en la sala:', players);
         players.forEach((player) => {
-            if (
-                player.position &&
-                typeof player.position.x === 'number' &&
-                typeof player.position.y === 'number' &&
-                typeof player.position.z === 'number'
-            ) {
-                gameScene.addPlayer(player);
-            } else {
-                console.warn('Jugador con datos de posición inválidos:', player);
+            if (!gameScene.getPlayerById(player.id)) {
+                gameScene.addPlayer(player); // Agrega al jugador si no existe
             }
         });
     });
-    
 
     // main.js
     socket.on('playerPositionUpdated', ({ id, position }) => {
