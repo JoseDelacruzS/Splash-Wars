@@ -49,19 +49,7 @@ playerController.initPlayer = (socket) => {
             }
         }
     });
-
-    // Escuchar la actualización de animación y rotación de los jugadores remotos
-    socket.on('playerAnimationAndRotationUpdated', ({ id, animation, rotation }) => {
-        const player = gameScene.getPlayerById(id);
-        if (player) {
-            // Actualizamos la animación
-            player.animations.play(animation);
-
-            // Actualizamos la rotación del jugador
-            player.model.rotation.set(rotation.x, rotation.y, rotation.z);
-        }
-    });
-
+    
 };
 
 // Eliminar jugador al desconectarse

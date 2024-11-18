@@ -191,25 +191,9 @@ function animate() {
 function update() {
     if (gameScene.player) {
         const position = gameScene.player.model.position;
-        const animation = gameScene.player.animations.currentAnimation;
-        const rotation = gameScene.player.model.rotation;
-
-        // Emitir la actualización de la posición
         socket.emit('updatePosition', { x: position.x, y: position.y, z: position.z });
-
-        // Emitir la actualización de la animación y la rotación
-        socket.emit('updateAnimationAndRotation', {
-            id: socket.id,
-            animation: animation,
-            rotation: {
-                x: rotation.x,
-                y: rotation.y,
-                z: rotation.z
-            }
-        });
     }
 }
-
 
 // Ajustar tamaño de la ventana
 function onWindowResize() {

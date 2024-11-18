@@ -114,24 +114,6 @@ io.on('connection', (socket) => {
             }
         }
     });
-
-    // Actualizar animación y rotación de un jugador
-    socket.on('updateAnimationAndRotation', ({ id, animation, rotation }) => {
-        if (players[id]) {
-            // Actualizamos la animación y la rotación en el servidor
-            players[id].animation = animation;
-            players[id].rotation = rotation;  // Guardamos la rotación
-
-            // Emitir la actualización a los demás jugadores en la sala
-            const roomId = Object.keys(rooms).find(roomId =>
-                rooms[roomId].some(player => player.id === id)
-            );
-            if (roomId) {
-                socket.broadcast.to(roomId).emit('playerAnimationAndRotationUpdated', { id, animation, rotation });
-            }
-        }
-    });
-
 });
 
 const port = process.env.PORT || 3000;
