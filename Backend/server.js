@@ -79,20 +79,14 @@ io.on('connection', (socket) => {
     });
 
     // Actualizar posición del jugador
-    socket.on('updatePosition', ({ position, animation, yaw }) => {
+    socket.on('updatePosition', (position) => {
         if (players[socket.id]) {
             players[socket.id].position = position;
-            players[socket.id].yaw = yaw; // Guardar la rotación
-            const roomId = Object.keys( rooms).find(roomId =>
+            const roomId = Object.keys(rooms).find(roomId =>
                 rooms[roomId].some(player => player.id === socket.id)
             );
             if (roomId) {
-                socket.broadcast.to(roomId).emit('playerPositionUpdated', {
-                    id: socket.id,
-                    position: players[socket.id].position,
-                    animation: players[socket.id].animation,
-                    yaw: players[socket.id].yaw
-                });
+                socket.broadcast.to(roomId).emit('playerPositionUpdated', formatPlayerData(socket.id));
             }
         }
     });

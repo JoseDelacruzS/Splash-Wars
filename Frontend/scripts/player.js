@@ -3,26 +3,29 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
 
 export class Player {
-    constructor(scene, camera, gameScene, id) {
+    constructor(scene, camera, gameScene) {
         this.scene = scene;
         this.camera = camera;
-        this.gameScene = gameScene;
-        this.id = id; // ID único para cada jugador
+        this.gameScene = gameScene; // Inicialización correcta de gameScene
         this.model = null;
         this.velocity = new THREE.Vector3();
         this.moveSpeed = 7;
 
+        // Configuración de la cámara
         this.cameraOffset = new THREE.Vector3(0, 3, -3);
         this.cameraLookAtOffset = new THREE.Vector3(0, 4.5, 0);
 
         this.mouseSensitivity = 0.001;
         this.pitch = 0;
         this.yaw = 0;
-        this.animations = new PlayerAnimations();
+        this.PlayerAnimations = null;
+
+        // Configuración del salto
         this.isJumping = false;
         this.jumpVelocity = 5;
         this.gravity = -9.81;
         this.velocityY = 10;
+        this.jumpHeight = 100;
 
         this.loadModel();
         this.setupKeyboardControls();
@@ -30,6 +33,9 @@ export class Player {
     }
 
     loadModel() {
+        if (this.model) {
+            this.scene.remove(this.model);
+        }
         const loader = new FBXLoader();
         loader.load(
             '../assets/models/Player/source/little_boy_2.fbx',
@@ -38,10 +44,16 @@ export class Player {
                 this.model.scale.set(0.03, 0.03, 0.03);
                 this.model.position.set(0, 4, 0);
                 this.loadTexture();
-                this.loadAnimations(); // Cargar animaciones aquí
+                this.animations = new PlayerAnimations(this.model);
+                this.loadAnimations();
                 this.scene.add(this.model);
                 this.updateCameraPosition();
-                this.gameScene.addPlayer({ id: this.id, position: this.model.position });
+
+                if (this.gameScene && this.gameScene.addPlayer) {
+                    this.gameScene.addPlayer({ id: this.id, position: this.model.position });
+                } else {
+                    console.warn("gameScene no está definido o no tiene un método addPlayer.");
+                }
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
@@ -77,14 +89,15 @@ export class Player {
         this.model.position.set(position.x, position.y, position.z);
     }
 
-    updateRotation(yaw) {
-        if (this.model) {
-            this.model.rotation.y = yaw; // Actualiza la rotación del modelo
-        }
-    }
-
     setupKeyboardControls() {
-        this.keys = { w: false, a: false, s: false, d: false, space: false };
+        this.keys = {
+            w: false,
+            a: false,
+            s: false,
+            d: false,
+            space: false, // Salto
+        };
+
         document.addEventListener('keydown', (event) => this.onKeyDown(event), false);
         document.addEventListener('keyup', (event) => this.onKeyUp(event), false);
     }
@@ -131,10 +144,11 @@ export class Player {
         }
     }
 
-    update(deltaTime, animation) {
+    update(deltaTime) {
         if (!this.model) return;
 
         this.velocity.set(0, 0, 0);
+
         const rotationMatrix = new THREE.Matrix4();
         rotationMatrix.makeRotationY(this.model.rotation.y);
 
@@ -167,12 +181,17 @@ export class Player {
 
         if (this.animations) {
             this.animations.update(deltaTime);
-            if (animation) {
-                this.animations.play(animation);
-            }
         }
 
-        this.updateRotation(this.yaw);
+        if (this.isJumping) {
+            this.animations.play('jump');
+        } else if (this.velocity.length() > 0) {
+            this.animations.play('run');
+        } else {
+            this.animations.play('idle');
+        }
+
+        this.model.rotation.y = this.yaw;
         this.updateCameraPosition();
     }
 
