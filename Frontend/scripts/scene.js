@@ -102,15 +102,23 @@ export default class GameScene {
         }
     
         // Cargar un modelo nuevo para el jugador
-        const newPlayer = new Player(this.scene, this.camera); // Crea una nueva instancia de Player
-        newPlayer.model.position.set(
-            playerData.position.x,
-            playerData.position.y,
-            playerData.position.z
-        );
+        const newPlayer = new Player(this.scene, this.camera); // Instancia Player
         newPlayer.id = playerData.id; // Identificador único
+    
+        // Asegúrate de que el modelo esté cargado antes de establecer la posición
+        if (newPlayer.model) {
+            newPlayer.model.position.set(
+                playerData.position.x,
+                playerData.position.y,
+                playerData.position.z
+            );
+        } else {
+            console.error("El modelo de Player no está cargado.");
+        }
+    
         this.players.push(newPlayer); // Añade al array de jugadores
-    }    
+    }
+     
 
     // scene.js
     getPlayerById(id) {

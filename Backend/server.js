@@ -41,6 +41,11 @@ io.on('connection', (socket) => {
 
     // Cuando un jugador se une a una sala
     socket.on('joinRoom', (roomId, playerName) => {
+        if (!roomId || typeof playerName !== 'string' || !playerName.trim()) {
+            socket.emit('message', 'Datos inválidos para unirse a la sala.');
+            return;
+        }
+        
         const room = rooms[roomId] || [];
         const playerId = socket.id;
 
@@ -69,6 +74,8 @@ io.on('connection', (socket) => {
         } else {
             socket.emit('message', 'La sala está llena. Intenta con otra.');
         }
+
+        socket.broadcast.emit('newPlayer', formatPlayerData(socket.id));
     });
 
     // Actualizar posición del jugador

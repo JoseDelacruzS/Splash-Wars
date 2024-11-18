@@ -45,9 +45,10 @@ export class Player {
                 this.scene.add(this.model);
                 this.updateCameraPosition();
 
-                // Aquí se puede llamar a la función para agregar el jugador cuando el modelo se ha cargado
-                if (this.id) {
+                if (this.model && this.model.position) {
                     gameScene.addPlayer({ id: this.id, position: this.model.position });
+                } else {
+                    console.error("El modelo no está cargado completamente o la posición no está definida.");
                 }
             },
             (xhr) => {

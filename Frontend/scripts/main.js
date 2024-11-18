@@ -52,13 +52,21 @@ function setupSocketListeners() {
 
     // Evento para un nuevo jugador
     socket.on('newPlayer', (playerData) => {
-        if (playerData && playerData.position) {
+        if (
+            playerData &&
+            playerData.id &&
+            playerData.position &&
+            typeof playerData.position.x === 'number' &&
+            typeof playerData.position.y === 'number' &&
+            typeof playerData.position.z === 'number'
+        ) {
             console.log('Nuevo jugador conectado:', playerData);
             gameScene.addPlayer(playerData);
         } else {
             console.error('Error: Datos del nuevo jugador incompletos:', playerData);
         }
     });
+    
     
     socket.on('updatePosition', (position) => {
         if (players[socket.id]) {
