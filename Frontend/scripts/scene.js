@@ -9,10 +9,10 @@ export default class GameScene {
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 1000);
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.clock = new THREE.Clock();
+        this.player = new Player(this.scene, this.camera, this);
         this.hud = new HUD();
         this.map = null;
         this.players = [];
-        this.player = null;
 
         this.init();
         this.animate();
@@ -24,7 +24,6 @@ export default class GameScene {
         this.setupLights();
         this.setupEventListeners();
         this.loadGameElements();
-        this.initHUD();
     }
 
     setupRenderer() {
@@ -42,7 +41,7 @@ export default class GameScene {
         this.scene.add(ambientLight);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(5, 10, 5);
+        directionalLight.position.set(0, 10, 0);
         this.scene.add(directionalLight);
     }
 
@@ -56,14 +55,17 @@ export default class GameScene {
     }
 
     loadPlayer() {
-        this.player = new Player(this.scene, this.camera, this);
+        this.player = new Player(this.scene, this.camera);
     }
 
     update() {
         const deltaTime = this.clock.getDelta();
-        if (this.player) this.player.update(deltaTime);
-        if (this.map) this.map.update();
-        this.players.forEach(player => player.update(deltaTime));
+        if (this.player) {
+            this.player.update(deltaTime);
+        }
+        if (this.map) {
+            this.map.update();
+        }
     }
 
     render() {
@@ -77,9 +79,13 @@ export default class GameScene {
     }
 
     initHUD() {
-        this.hud.updateLife(100);
-        this.hud.updateTimer(120);
-        this.hud.updateAmmo(15);
+        if (this.hud) {
+            this.hud.updateLife(100);
+            this.hud.updateTimer(120);
+            this.hud.updateAmmo(15);
+        } else {
+            console.error('HUD no está inicializado');
+        }
     }
 
     animate() {
@@ -88,24 +94,33 @@ export default class GameScene {
         this.render();
     }
 
+    // Agrega un jugador a la escena
     addPlayer(playerData) {
         if (!playerData || !playerData.position) {
             console.error('Datos de jugador inválidos:', playerData);
             return;
         }
-
-        const newPlayer = new Player(this.scene, this.camera, this);
-        newPlayer.id = playerData.id;
-
-        newPlayer.model.position.set(
-            playerData.position.x,
-            playerData.position.y,
-            playerData.position.z
-        );
-
-        this.players.push(newPlayer);
+    
+        // Cargar un modelo nuevo para el jugador
+        const newPlayer = new Player(this.scene, this.camera); // Instancia Player
+        newPlayer.id = playerData.id; // Identificador único
+    
+        // Asegúrate de que el modelo esté cargado antes de establecer la posición
+        if (newPlayer.model) {
+            newPlayer.model.position.set(
+                playerData.position.x,
+                playerData.position.y,
+                playerData.position.z
+            );
+        } else {
+            console.error("El modelo de Player no está cargado.");
+        }
+    
+        this.players.push(newPlayer); // Añade al array de jugadores
     }
+     
 
+    // scene.js
     getPlayerById(id) {
         return this.players.find(player => player.id === id);
     }
@@ -114,7 +129,8 @@ export default class GameScene {
         const playerIndex = this.players.findIndex(player => player.id === playerId);
         if (playerIndex !== -1) {
             const [removedPlayer] = this.players.splice(playerIndex, 1);
-            this.scene.remove(removedPlayer.model);
+            this.scene.remove(removedPlayer.model); // Elimina el modelo de la escena
         }
     }
+
 }
