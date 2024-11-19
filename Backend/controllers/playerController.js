@@ -32,7 +32,7 @@ playerController.updatePosition = (socket, position, io, rooms) => {
         );
 
         if (roomId) {
-            io.to(roomId).emit("playerPositionUpdated", playerController.formatPlayerData(socket.id));
+            io.to(roomId).emit("updateAllPositions", playerController.getAllPlayerPositions());
         }
     }
 };
