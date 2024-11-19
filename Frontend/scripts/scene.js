@@ -10,6 +10,7 @@ export default class GameScene {
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.clock = new THREE.Clock();
         this.player = new Player(this.scene, this.camera, this);
+        this.player.loadModel(true); // Indica que es el jugador local
         this.hud = new HUD();
         this.map = null;
         this.players = [];
@@ -95,16 +96,21 @@ export default class GameScene {
             console.error('Datos de jugador inválidos:', playerData);
             return;
         }
+    
         // Verifica que el jugador no sea duplicado
         const existingPlayer = this.getPlayerById(playerData.id);
         if (existingPlayer) {
             console.warn('El jugador ya existe en la escena:', playerData.id);
+            // Actualiza su posición
+            existingPlayer.updatePosition(playerData.position);
             return;
         }
-        // Cargar un modelo nuevo para el jugador
+    
+        // Cargar un modelo nuevo para el jugador remoto
         const newPlayer = new Player(this.scene, this.camera); // Instancia Player
         newPlayer.id = playerData.id; // Identificador único
-
+        newPlayer.loadModel(false); // Indica que es un jugador remoto
+    
         // Asegúrate de que el modelo esté cargado antes de establecer la posición
         if (newPlayer.model) {
             newPlayer.model.position.set(
@@ -115,11 +121,9 @@ export default class GameScene {
         } else {
             console.error("El modelo de Player no está cargado.");
         }
-
+    
         this.players.push(newPlayer); // Añade al array de jugadores
     }
-
-
     // scene.js
     getPlayerById(id) {
         return this.players.find(player => player.id === id);

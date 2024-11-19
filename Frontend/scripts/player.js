@@ -32,7 +32,7 @@ export class Player {
         this.setupMouseControls();
     }
 
-    loadModel() {
+    loadModel(isLocal) {
         if (this.model) {
             this.scene.remove(this.model);
         }
@@ -48,7 +48,15 @@ export class Player {
                 this.loadAnimations();
                 this.scene.add(this.model);
                 this.updateCameraPosition();
-                
+    
+                // Solo si es el jugador local, lo añadimos a la escena
+                if (isLocal) {
+                    this.gameScene.addPlayer({ 
+                        id: this.id, 
+                        position: this.model.position, 
+                        isLocalPlayer: true 
+                    });
+                }
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
