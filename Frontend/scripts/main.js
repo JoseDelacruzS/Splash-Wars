@@ -119,11 +119,20 @@ function setupSocketListeners() {
     });
 
     socket.on('addPlayer', (playerData) => {
-        // Verificar que los datos del jugador sean válidos
-        if (playerData && playerData.x && playerData.y && playerData.z) {
-            this.gameScene.addPlayer(playerData);
+        // Evitar agregar al jugador local de nuevo
+        if (playerData.id === socket.id) {
+            console.warn('El jugador local ya está inicializado:', playerData.id);
+            return;
+        }
+    
+        // Verificar que no exista ya en la escena
+        if (!gameScene.getPlayerById(playerData.id)) {
+            gameScene.addPlayer(playerData);
+        } else {
+            console.warn("Jugador ya existente:", playerData.id);
         }
     });
+    
 
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
