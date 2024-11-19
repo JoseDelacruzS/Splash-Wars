@@ -114,10 +114,10 @@ function setupSocketListeners() {
 
     // main.js
     socket.on('playerPositionUpdated', ({ id, position }) => {
-            if (id === socket.id) {
-        // Ignorar actualizaciones de posición del propio jugador
-        return;
-    }
+        if (id === socket.id) {
+            // Ignorar actualizaciones de posición del propio jugador
+            return;
+        }
         const player = gameScene.getPlayerById(id); // Debes implementar getPlayerById en GameScene
         if (player) {
             player.updatePosition(position); // Actualiza la posición del jugador
