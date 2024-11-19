@@ -183,12 +183,13 @@ function setupSocketListeners() {
         }
     });    
 
-    socket.on('playerAnimationUpdated', (animationState) => {
-        const player = gameScene.getPlayerById(playerId); // Necesitas esta función para obtener el jugador por ID
+    socket.on('playerAnimationUpdated', ({ id, animation }) => {
+        const player = gameScene.getPlayerById(id);
         if (player) {
-            player.updateAnimation(animationState); // Actualiza la animación
+            player.animations.play(animation);
         }
     });
+    
     
 }
 
@@ -211,7 +212,9 @@ function animate() {
 function update() {
     if (gameScene.player) {
         const position = gameScene.player.model.position;
+        const animation = gameScene.player.animations.currentAnimation;
         socket.emit('updatePosition', { x: position.x, y: position.y, z: position.z });
+        socket.emit('updateAnimation', { id: socket.id, animation });
     }
 }
 
