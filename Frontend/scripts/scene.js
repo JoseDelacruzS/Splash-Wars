@@ -130,6 +130,6 @@ export default class GameScene {
             const [removedPlayer] = this.players.splice(playerIndex, 1);
             this.scene.remove(removedPlayer.model); // Elimina el modelo de la escena
         }
-    }
+    }    
 
 }

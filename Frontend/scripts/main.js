@@ -52,14 +52,6 @@ function setupSocketListeners() {
         localPlayerId = socket.id; 
     });
     
-    socket.on('updatePosition', (data) => {
-        const { id, position } = data;
-        if (players[id]) {
-            players[id].position = position;
-            io.to(roomId).emit('updateAllPositions', players);
-        }
-    });
-    
     // Evento de inicio del juego
     socket.on('gameStarted', () => {
         console.log('El juego ha comenzado');
@@ -128,25 +120,28 @@ function setupSocketListeners() {
         }
     });
 
-    // socket.on('updateAllPositions', (playersData) => {
-    //     Object.keys(playersData).forEach((id) => {
-    //         const playerData = playersData[id];
-    //         if (id !== socket.id) {
-    //             // No actualizar la posición propia, ya que eso se maneja localmente
-    //             const player = gameScene.getPlayerById(id);
-    //             if (player) {
-    //                 player.model.position.set(
-    //                     playerData.position.x,
-    //                     playerData.position.y,
-    //                     playerData.position.z
-    //                 );
-    //             } else {
-    //                 gameScene.addPlayer(playerData); // Agregar nuevo jugador si no existe
-    //             }
-    //         }
-    //     });
-    // });
+    socket.on('updateAllPositions', (playersData) => {
+        Object.keys(playersData).forEach((id) => {
+            const playerData = playersData[id];
+            if (id !== socket.id) { // No actualizar la posición propia
+                let player = gameScene.getPlayerById(id);
+                if (player) {
+                    player.updatePosition(playerData.position);
+                } else {
+                    gameScene.addPlayer(playerData); // Solo agregar si no existe
+                }
+            }
+        });
+    });
     
+    socket.on('updatePosition', (data) => {
+        const { id, position } = data;
+        if (players[id]) {
+            players[id].position = position;
+            io.to(roomId).emit('updateAllPositions', players);
+        }
+    });
+
     socket.on('playerDisconnected', (playerId) => {
         const player = gameScene.getPlayerById(playerId);
         if (player) {

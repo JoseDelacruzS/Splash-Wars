@@ -3,10 +3,9 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
 
 export class Player {
-    constructor(scene, camera, gameScene) {
+    constructor(scene, camera) {
         this.scene = scene;
         this.camera = camera;
-        this.gameScene = gameScene; // Inicialización correcta de gameScene
         this.model = null;
         this.velocity = new THREE.Vector3();
         this.moveSpeed = 7;
