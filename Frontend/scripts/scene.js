@@ -94,47 +94,36 @@ export default class GameScene {
         this.render();
     }
 
-// Agrega un jugador a la escena
-addPlayer(playerData) {
-    if (!playerData || !playerData.position) {
-        console.error('Datos de jugador inválidos:', playerData);
-        return;
-    }
-
-    // Verificar si el jugador ya existe para evitar duplicados
-    if (this.getPlayerById(playerData.id)) {
-        console.warn(`Jugador con ID ${playerData.id} ya existe en la escena.`);
-        return;
-    }
-
-    // Instanciar un nuevo jugador
-    const newPlayer = new Player(this.scene, this.camera, this); // Pasa la referencia de `gameScene` si es necesario
-    newPlayer.id = playerData.id;
-
-    // Escuchar cuando el modelo esté cargado
-    newPlayer.loadModel(); // Asume que `loadModel` maneja el cargador asíncrono
-    newPlayer.modelLoadedCallback = () => {
-        // Establecer posición inicial
-        newPlayer.model.position.set(
-            playerData.position.x,
-            playerData.position.y,
-            playerData.position.z
-        );
-
-        // Reproducir la animación inicial, si está definida
-        if (playerData.animation && newPlayer.animations) {
-            newPlayer.animations.play(playerData.animation);
+    // Agrega un jugador a la escena
+    addPlayer(playerData) {
+        if (!playerData || !playerData.position) {
+            console.error('Datos de jugador inválidos:', playerData);
+            return;
         }
-    };
+    
+        // Cargar un modelo nuevo para el jugador
+        const newPlayer = new Player(this.scene, this.camera); // Instancia Player
+        newPlayer.id = playerData.id; // Identificador único
+    
+        // Asegúrate de que el modelo esté cargado antes de establecer la posición
+        if (newPlayer.model) {
+            newPlayer.model.position.set(
+                playerData.position.x,
+                playerData.position.y,
+                playerData.position.z
+            );
+        } else {
+            console.error("El modelo de Player no está cargado.");
+        }
+    
+        this.players.push(newPlayer); // Añade al array de jugadores
+    }
+     
 
-    // Añadir al array de jugadores
-    this.players.push(newPlayer);
-}
-
-// Obtén un jugador por ID
-getPlayerById(id) {
-    return this.players.find(player => player.id === id);
-}
+    // scene.js
+    getPlayerById(id) {
+        return this.players.find(player => player.id === id);
+    }
 
     removePlayer(playerId) {
         const playerIndex = this.players.findIndex(player => player.id === playerId);

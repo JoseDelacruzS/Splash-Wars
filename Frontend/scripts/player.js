@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
-import {PlayerController} from '/Backend/controllers/playerController.js';
 
 export class Player {
     constructor(scene, camera, gameScene) {
@@ -51,9 +50,9 @@ export class Player {
                 this.updateCameraPosition();
 
                 if (this.gameScene && this.gameScene.addPlayer) {
-                    this.gameScene.addPlayer({
-                        id: this.id,
-                        position: this.model.position,
+                    this.gameScene.addPlayer({ 
+                        id: this.id, 
+                        position: this.model.position, 
                         isLocalPlayer: true // Asegúrate de etiquetarlo como jugador local
                     });
                 }
@@ -184,7 +183,6 @@ export class Player {
 
         if (this.animations) {
             this.animations.update(deltaTime);
-            socket.emit('updateAnimation', { id: this.id, animation: this.animations.currentAnimation });
         }
 
         if (this.isJumping) {

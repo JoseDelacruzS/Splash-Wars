@@ -61,14 +61,6 @@ io.on("connection", (socket) => {
         console.log("Un jugador se desconectó:", socket.id);
         playerController.removePlayer(socket, io, rooms);
     });
-
-    socket.on('updateAnimation', (data) => {
-        const { id, animation } = data;
-        if (rooms[roomId]) {
-            socket.broadcast.to(roomId).emit('playerAnimationUpdated', { id, animation });
-        }
-    });
-    
 });
 
 const port = process.env.PORT || 3000;

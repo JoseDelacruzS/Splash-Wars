@@ -183,13 +183,13 @@ function setupSocketListeners() {
         }
     });    
 
-    socket.on('playerAnimationUpdated', ({ id, animation }) => {
-        const player = gameScene.getPlayerById(id);
-        if (player) {
-            player.animations.play(animation);
-        }
-    });
-    
+socket.on('playerAnimationUpdated', ({ id, animation }) => {
+    const player = gameScene.getPlayerById(id);
+    if (player) {
+        player.animations.play(animation);
+    }
+});
+
     
 }
 
