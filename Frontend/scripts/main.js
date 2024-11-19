@@ -52,6 +52,14 @@ function setupSocketListeners() {
         localPlayerId = socket.id; 
     });
     
+    socket.on('updatePosition', (data) => {
+        const { id, position } = data;
+        if (players[id]) {
+            players[id].position = position;
+            io.to(roomId).emit('updateAllPositions', players);
+        }
+    });
+    
     // Evento de inicio del juego
     socket.on('gameStarted', () => {
         console.log('El juego ha comenzado');
@@ -139,14 +147,6 @@ function setupSocketListeners() {
         });
     });
     
-    socket.on('updatePosition', (data) => {
-        const { id, position } = data;
-        if (players[id]) {
-            players[id].position = position;
-            io.to(roomId).emit('updateAllPositions', players);
-        }
-    });
-
     socket.on('playerDisconnected', (playerId) => {
         const player = gameScene.getPlayerById(playerId);
         if (player) {

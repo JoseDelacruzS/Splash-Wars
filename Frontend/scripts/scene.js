@@ -95,25 +95,24 @@ export default class GameScene {
             console.error('Datos de jugador inválidos:', playerData);
             return;
         }
-        // Verifica que el jugador no sea duplicado
-        const existingPlayer = this.getPlayerById(playerData.id);
-        if (existingPlayer) {
-            console.warn('El jugador ya existe en la escena:', playerData.id);
-            return;
-        }
         // Cargar un modelo nuevo para el jugador
         const newPlayer = new Player(this.scene, this.camera); // Instancia Player
         newPlayer.id = playerData.id; // Identificador único
 
         // Asegúrate de que el modelo esté cargado antes de establecer la posición
         if (newPlayer.model) {
-            newPlayer.model.position.set(playerData.position.x, playerData.position.y, playerData.position.z);
+            newPlayer.model.position.set(
+                playerData.position.x,
+                playerData.position.y,
+                playerData.position.z
+            );
         } else {
             console.error("El modelo de Player no está cargado.");
         }
 
         this.players.push(newPlayer); // Añade al array de jugadores
     }
+
 
     // scene.js
     getPlayerById(id) {
@@ -126,6 +125,6 @@ export default class GameScene {
             const [removedPlayer] = this.players.splice(playerIndex, 1);
             this.scene.remove(removedPlayer.model); // Elimina el modelo de la escena
         }
-    }    
+    }
 
 }
