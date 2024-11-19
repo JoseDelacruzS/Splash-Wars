@@ -95,7 +95,12 @@ export default class GameScene {
             console.error('Datos de jugador inválidos:', playerData);
             return;
         }
-        
+
+        // Evita agregar al jugador local
+        if (playerData.id === socket.id) {
+            console.log('Jugador local ignorado en addPlayer:', playerData.id);
+            return;
+        }
         // Verifica que el jugador no sea duplicado
         const existingPlayer = this.getPlayerById(playerData.id);
         if (existingPlayer) {
@@ -132,6 +137,6 @@ export default class GameScene {
             this.scene.remove(removedPlayer.model); // Elimina el modelo de la escena
         }
     }
-    
+
 
 }
