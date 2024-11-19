@@ -6,6 +6,7 @@ export class Player {
     constructor(scene, camera) {
         this.scene = scene;
         this.camera = camera;
+        this.gameScene = gameScene; // Inicialización correcta de gameScene
         this.model = null;
         this.velocity = new THREE.Vector3();
         this.moveSpeed = 7;
