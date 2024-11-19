@@ -3,6 +3,12 @@ import * as THREE from 'three';
 import GameScene from './scene.js';
 import { HUD } from './hud.js';
 
+// Variables de la escena
+let gameScene, hud;
+let playerLife = 100;
+let timeLeft = 120; // 2 minutos
+let ammo = 15;
+let localPlayerId;
 
 // Conectar al servidor de Socket.IO
 const socket = io('https://splash-wars-game-a9d5d91bfbd6.herokuapp.com');
@@ -20,8 +26,6 @@ function joinRandomRoom() {
     const playerName = generateRandomName();  // Genera un nombre aleatorio para el jugador
     socket.emit('joinRoom', roomId, playerName); // Emitir el evento de unirse a la sala con el nombre aleatorio
 }
-
-let localPlayerId; // ID del jugador local
 
 // Inicialización
 function init() {
@@ -45,7 +49,7 @@ function setupSocketListeners() {
     // Confirmar conexión
     socket.on('connect', () => {
         console.log('Conectado al servidor con ID:', socket.id);
-        localPlayerId = socket.id;
+        localPlayerId = socket.id; 
     });
 
     // Evento para un nuevo jugador
@@ -143,12 +147,15 @@ function setupSocketListeners() {
     });
 
     // main.js
-    socket.on('playerPositionUpdated', ({ id, position }) => {
-        const player = gameScene.getPlayerById(id); // Debes implementar getPlayerById en GameScene
+    socket.on('playerPositionUpdated', (playerData) => {
+        const player = gameScene.getPlayerById(playerData.id);
         if (player) {
-            player.updatePosition(position); // Actualiza la posición del jugador
+            player.updatePosition(playerData.position);
+        } else {
+            gameScene.addPlayer(playerData);
         }
     });
+    
 
     socket.on('updateAllPositions', (playersData) => {
         Object.keys(playersData).forEach((id) => {
