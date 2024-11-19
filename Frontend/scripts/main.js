@@ -30,7 +30,7 @@ function joinRandomRoom() {
 // Inicialización
 function init() {
     // Crear escena y HUD
-    gameScene = new GameScene(socket);
+    gameScene = new GameScene();
     hud = new HUD();
 
     // Unirse a la sala con nombre aleatorio
@@ -50,6 +50,21 @@ function setupSocketListeners() {
     socket.on('connect', () => {
         console.log('Conectado al servidor con ID:', socket.id);
         localPlayerId = socket.id; 
+    });
+    
+    socket.on('updatePosition', (position) => {
+        if (players[socket.id]) {
+            players[socket.id].position = position || { x: 0, y: 0, z: 0 }; // Agregar validación
+            const roomId = Object.keys(rooms).find(roomId =>
+                rooms[roomId].some(player => player.id === socket.id)
+            );
+            if (roomId) {
+                socket.broadcast.to(roomId).emit('playerPositionUpdated', {
+                    id: socket.id,
+                    position: players[socket.id].position,
+                });
+            }
+        }
     });
     
     // Evento de inicio del juego
@@ -101,6 +116,7 @@ function setupSocketListeners() {
             console.warn("Jugador ya existente:", playerData.id);
         }
     });
+    
 
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
@@ -139,14 +155,6 @@ function setupSocketListeners() {
         });
     });
     
-        socket.on('updatePosition', (data) => {
-        const { id, position } = data;
-        if (players[id]) {
-            players[id].position = position;
-            io.to(roomId).emit('updateAllPositions', players);
-        }
-    });
-
     socket.on('playerDisconnected', (playerId) => {
         const player = gameScene.getPlayerById(playerId);
         if (player) {
