@@ -128,11 +128,6 @@ function setupSocketListeners() {
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
         console.log('Jugadores en la sala:', players);
-        players.forEach((player) => {
-            if (!gameScene.getPlayerById(player.id)) {
-                gameScene.addPlayer(player); // Agrega al jugador si no existe
-            }
-        });
     });
 
     // main.js
@@ -155,6 +150,8 @@ function setupSocketListeners() {
                         playerData.position.y,
                         playerData.position.z
                     );
+                } else {
+                    gameScene.addPlayer(playerData); // Agregar nuevo jugador si no existe
                 }
             }
         });
