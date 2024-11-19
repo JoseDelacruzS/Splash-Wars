@@ -123,21 +123,17 @@ function setupSocketListeners() {
     socket.on('updateAllPositions', (playersData) => {
         Object.keys(playersData).forEach((id) => {
             const playerData = playersData[id];
-            if (id !== socket.id) {
-                // No actualizar la posición propia, ya que eso se maneja localmente
-                const player = gameScene.getPlayerById(id);
+            if (id !== socket.id) { // No actualizar la posición propia
+                let player = gameScene.getPlayerById(id);
                 if (player) {
-                    player.model.position.set(
-                        playerData.position.x,
-                        playerData.position.y,
-                        playerData.position.z
-                    );
+                    player.updatePosition(playerData.position);
                 } else {
-                    gameScene.addPlayer(playerData); // Agregar nuevo jugador si no existe
+                    gameScene.addPlayer(playerData); // Solo agregar si no existe
                 }
             }
         });
     });
+    
     
     socket.on('updatePosition', (data) => {
         const { id, position } = data;

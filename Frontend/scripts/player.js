@@ -3,10 +3,9 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
 
 export class Player {
-    constructor(scene, camera, gameScene) {
+    constructor(scene, camera) {
         this.scene = scene;
         this.camera = camera;
-        this.gameScene = gameScene; // Inicialización correcta de gameScene
         this.model = null;
         this.velocity = new THREE.Vector3();
         this.moveSpeed = 7;
@@ -48,14 +47,7 @@ export class Player {
                 this.loadAnimations();
                 this.scene.add(this.model);
                 this.updateCameraPosition();
-
-                if (this.gameScene && this.gameScene.addPlayer) {
-                    this.gameScene.addPlayer({ 
-                        id: this.id, 
-                        position: this.model.position, 
-                        isLocalPlayer: true // Asegúrate de etiquetarlo como jugador local
-                    });
-                }
+                
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded');

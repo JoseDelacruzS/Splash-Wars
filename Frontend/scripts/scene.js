@@ -95,13 +95,12 @@ export default class GameScene {
             console.error('Datos de jugador inválidos:', playerData);
             return;
         }
-
-        // Verificar si el jugador ya existe
-        if (this.getPlayerById(playerData.id)) {
-            console.warn(`El jugador con ID ${playerData.id} ya existe.`);
-            return; // No añadir si ya existe
+        // Verifica que el jugador no sea duplicado
+        const existingPlayer = this.getPlayerById(playerData.id);
+        if (existingPlayer) {
+            console.warn('El jugador ya existe en la escena:', playerData.id);
+            return;
         }
-
         // Cargar un modelo nuevo para el jugador
         const newPlayer = new Player(this.scene, this.camera); // Instancia Player
         newPlayer.id = playerData.id; // Identificador único
@@ -120,7 +119,6 @@ export default class GameScene {
         this.players.push(newPlayer); // Añade al array de jugadores
     }
 
-
     // scene.js
     getPlayerById(id) {
         return this.players.find(player => player.id === id);
@@ -133,5 +131,6 @@ export default class GameScene {
             this.scene.remove(removedPlayer.model); // Elimina el modelo de la escena
         }
     }
+    
 
 }
