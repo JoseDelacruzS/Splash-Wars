@@ -118,6 +118,13 @@ function setupSocketListeners() {
         console.log(message);
     });
 
+    socket.on('addPlayer', (playerData) => {
+        // Verificar que los datos del jugador sean válidos
+        if (playerData && playerData.x && playerData.y && playerData.z) {
+            this.gameScene.addPlayer(playerData);
+        }
+    });
+
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
         console.log('Jugadores en la sala:', players);
