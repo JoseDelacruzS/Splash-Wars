@@ -89,27 +89,23 @@ export default class GameScene {
         this.render();
     }
 
+    // Agrega un jugador a la escena
     addPlayer(playerData) {
         if (!playerData || !playerData.position) {
             console.error('Datos de jugador inválidos:', playerData);
             return;
         }
-    
-        // Ignora al jugador local
-        if (playerData.id === localPlayerId) {
-            console.log('Ignorando jugador local en addPlayer');
-            return;
-        }
-    
+        // Verifica que el jugador no sea duplicado
         const existingPlayer = this.getPlayerById(playerData.id);
         if (existingPlayer) {
             console.warn('El jugador ya existe en la escena:', playerData.id);
             return;
         }
-    
-        const newPlayer = new Player(this.scene, this.camera);
-        newPlayer.id = playerData.id;
-    
+        // Cargar un modelo nuevo para el jugador
+        const newPlayer = new Player(this.scene, this.camera); // Instancia Player
+        newPlayer.id = playerData.id; // Identificador único
+
+        // Asegúrate de que el modelo esté cargado antes de establecer la posición
         if (newPlayer.model) {
             newPlayer.model.position.set(
                 playerData.position.x,
@@ -119,10 +115,11 @@ export default class GameScene {
         } else {
             console.error("El modelo de Player no está cargado.");
         }
-    
-        this.players.push(newPlayer);
+
+        this.players.push(newPlayer); // Añade al array de jugadores
     }
-    
+
+
     // scene.js
     getPlayerById(id) {
         return this.players.find(player => player.id === id);

@@ -147,15 +147,12 @@ function setupSocketListeners() {
     });
 
     // main.js
-    socket.on('playerPositionUpdated', (playerData) => {
-        const player = gameScene.getPlayerById(playerData.id);
+    socket.on('playerPositionUpdated', ({ id, position }) => {
+        const player = gameScene.getPlayerById(id); // Debes implementar getPlayerById en GameScene
         if (player) {
-            player.updatePosition(playerData.position);
-        } else {
-            gameScene.addPlayer(playerData);
+            player.updatePosition(position); // Actualiza la posición del jugador
         }
     });
-    
 
     socket.on('updateAllPositions', (playersData) => {
         Object.keys(playersData).forEach((id) => {
