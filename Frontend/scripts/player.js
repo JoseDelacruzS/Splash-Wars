@@ -80,7 +80,6 @@ export class Player {
             console.warn('Intentando actualizar posición antes de cargar el modelo');
             return;
         }
-        this.model.position.set(position.x, position.y, position.z);
         this.position.set(position.x, position.y, position.z);
     }
 
