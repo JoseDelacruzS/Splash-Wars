@@ -51,11 +51,6 @@ export default class GameScene {
 
     loadGameElements() {
         this.map = new Map(this.scene, this.camera);
-        //this.loadPlayer();
-    }
-
-    loadPlayer() {
-        this.player = new Player(this.scene, this.camera);
     }
 
     update() {
