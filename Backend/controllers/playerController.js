@@ -7,7 +7,6 @@ playerController.formatPlayerData = (id) => ({
     id,
     name: players[id]?.name || "Unknown",
     position: players[id]?.position || { x: 0, y: 0, z: 0 },
-    rotation: players[id]?.rotation || { x: 0, y: 0, z: 0 }, // Añade rotación
     health: players[id]?.health || 100,
 });
 
@@ -25,11 +24,9 @@ playerController.initPlayer = (socket, name) => {
 };
 
 // Actualiza la posición del jugador
-playerController.updatePosition = (socket, data, io, rooms) => {
-    const { position, rotation } = data; // Asegúrate de enviar rotación
+playerController.updatePosition = (socket, position, io, rooms) => {
     if (players[socket.id]) {
         players[socket.id].position = position;
-        players[socket.id].rotation = rotation;
 
         const roomId = Object.keys(rooms).find((roomId) =>
             rooms[roomId].some((player) => player.id === socket.id)

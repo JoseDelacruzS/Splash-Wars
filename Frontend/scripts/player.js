@@ -4,8 +4,7 @@ import { PlayerAnimations } from './playerAnimations.js';
 import {PlayerController} from '/Backend/controllers/playerController.js';
 
 export class Player {
-    constructor(scene, camera, gameScene, id) {
-        this.id = id || `player_${Date.now()}`;
+    constructor(scene, camera, gameScene) {
         this.scene = scene;
         this.camera = camera;
         this.gameScene = gameScene; // Inicialización correcta de gameScene
