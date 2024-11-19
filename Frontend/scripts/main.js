@@ -30,7 +30,7 @@ function joinRandomRoom() {
 // Inicialización
 function init() {
     // Crear escena y HUD
-    gameScene = new GameScene();
+    gameScene = new GameScene(socket);
     hud = new HUD();
 
     // Unirse a la sala con nombre aleatorio

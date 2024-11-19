@@ -4,7 +4,8 @@ import { Map } from './map1.js';
 import { Player } from './player.js';
 
 export default class GameScene {
-    constructor() {
+    constructor(socket) {
+        this.socket = socket;
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 1000);
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -97,7 +98,7 @@ export default class GameScene {
         }
 
         // Evita agregar al jugador local
-        if (playerData.id === socket.id) {
+        if (playerData.id === this.socket.id) {
             console.log('Jugador local ignorado en addPlayer:', playerData.id);
             return;
         }
