@@ -60,7 +60,6 @@ function setupSocketListeners() {
         }
     });
     
-    
     // Evento de inicio del juego
     socket.on('gameStarted', () => {
         console.log('El juego ha comenzado');
@@ -110,7 +109,6 @@ function setupSocketListeners() {
             console.warn("Jugador ya existente:", playerData.id);
         }
     });
-    
 
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
@@ -130,24 +128,24 @@ function setupSocketListeners() {
         }
     });
 
-    socket.on('updateAllPositions', (playersData) => {
-        Object.keys(playersData).forEach((id) => {
-            const playerData = playersData[id];
-            if (id !== socket.id) {
-                // No actualizar la posición propia, ya que eso se maneja localmente
-                const player = gameScene.getPlayerById(id);
-                if (player) {
-                    player.model.position.set(
-                        playerData.position.x,
-                        playerData.position.y,
-                        playerData.position.z
-                    );
-                } else {
-                    gameScene.addPlayer(playerData); // Agregar nuevo jugador si no existe
-                }
-            }
-        });
-    });
+    // socket.on('updateAllPositions', (playersData) => {
+    //     Object.keys(playersData).forEach((id) => {
+    //         const playerData = playersData[id];
+    //         if (id !== socket.id) {
+    //             // No actualizar la posición propia, ya que eso se maneja localmente
+    //             const player = gameScene.getPlayerById(id);
+    //             if (player) {
+    //                 player.model.position.set(
+    //                     playerData.position.x,
+    //                     playerData.position.y,
+    //                     playerData.position.z
+    //                 );
+    //             } else {
+    //                 gameScene.addPlayer(playerData); // Agregar nuevo jugador si no existe
+    //             }
+    //         }
+    //     });
+    // });
     
     socket.on('playerDisconnected', (playerId) => {
         const player = gameScene.getPlayerById(playerId);

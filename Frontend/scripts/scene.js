@@ -119,7 +119,6 @@ export default class GameScene {
         this.players.push(newPlayer); // Añade al array de jugadores
     }
 
-
     // scene.js
     getPlayerById(id) {
         return this.players.find(player => player.id === id);

@@ -18,7 +18,6 @@ playerController.initPlayer = (socket, name) => {
         position: { x: 0, y: 1, z: 0 }, // Posición inicial
         health: 100, // Salud inicial
     };
-
     console.log(`Jugador inicializado: ${socket.id}`);
     return playerController.formatPlayerData(socket.id);
 };
