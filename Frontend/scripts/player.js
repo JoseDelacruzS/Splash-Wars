@@ -44,6 +44,8 @@ export class Player {
                 this.model.scale.set(0.03, 0.03, 0.03);
                 this.model.position.set(0, 4, 0);
                 this.loadTexture();
+                this.animations = new PlayerAnimations(this.model);
+                this.loadAnimations();
                 this.scene.add(this.model);
                 this.updateCameraPosition();
                 
