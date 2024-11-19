@@ -96,12 +96,6 @@ export default class GameScene {
             return;
         }
 
-        // Verificar si el jugador ya existe
-        if (this.getPlayerById(playerData.id)) {
-            console.warn(`El jugador con ID ${playerData.id} ya existe.`);
-            return; // No añadir si ya existe
-        }
-
         // Cargar un modelo nuevo para el jugador
         const newPlayer = new Player(this.scene, this.camera); // Instancia Player
         newPlayer.id = playerData.id; // Identificador único
