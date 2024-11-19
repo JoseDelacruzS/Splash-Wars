@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const playerController = require('./playerController'); // Importar el controlador de jugadores
 
 const app = express();
 const server = http.createServer(app);
@@ -24,17 +25,6 @@ const io = new Server(server, {
 // Creamos un objeto para gestionar las salas
 const rooms = {};
 
-// Creamos un objeto para los jugadores
-const players = {};
-
-// Función para formatear los datos del jugador
-const formatPlayerData = (id) => ({
-    id,
-    name: players[id]?.name || "Unknown",
-    position: players[id]?.position || { x: 0, y: 0, z: 0 },
-    health: players[id]?.health || 100,
-});
-
 // Configuración de conexión de Socket.IO
 io.on('connection', (socket) => {
     console.log('Un jugador se conectó:', socket.id);
@@ -50,13 +40,8 @@ io.on('connection', (socket) => {
         const playerId = socket.id;
 
         if (room.length < 6) { // Limita el número de jugadores por sala
-            // Crea el estado inicial del jugador
-            players[playerId] = {
-                id: playerId,
-                name: playerName,
-                position: { x: 0, y: 1, z: 0 },
-                health: 100,
-            };
+            // Inicializa el jugador a través del controlador
+            playerController.initPlayer(socket, playerName);
 
             room.push({ id: playerId, name: playerName });
             rooms[roomId] = room;
@@ -67,34 +52,30 @@ io.on('connection', (socket) => {
 
             // Notificar a todos los jugadores en la sala
             io.to(roomId).emit('message', `${playerName} se ha unido al juego`);
-            io.to(roomId).emit('playersList', room.map(player => formatPlayerData(player.id)));
+            io.to(roomId).emit('playersList', room.map(player => playerController.formatPlayerData(player.id)));
 
             // Notificar a otros jugadores sobre el nuevo jugador
-            socket.broadcast.to(roomId).emit('newPlayer', formatPlayerData(playerId));
+            socket.broadcast.to(roomId).emit('newPlayer', playerController.formatPlayerData(playerId));
         } else {
             socket.emit('message', 'La sala está llena. Intenta con otra.');
         }
-
-        socket.broadcast.emit('newPlayer', formatPlayerData(socket.id));
     });
 
     // Actualizar posición del jugador
     socket.on('updatePosition', (position) => {
-        if (players[socket.id]) {
-            players[socket.id].position = position;
-            const roomId = Object.keys(rooms).find(roomId =>
-                rooms[roomId].some(player => player.id === socket.id)
-            );
-            if (roomId) {
-                socket.broadcast.to(roomId).emit('playerPositionUpdated', formatPlayerData(socket.id));
-            }
-        }
+        playerController.updatePosition(socket, position);
     });
 
+    // Actualizar animación del jugador
     socket.on('updatePlayerAnimation', (playerId, animationState) => {
         // Emitir la animación al cliente correspondiente
         socket.to(playerId).emit('playerAnimationUpdated', animationState);
-    });    
+    });
+
+    // Manejar daño recibido
+    socket.on('receiveDamage', (damage) => {
+        playerController.receiveDamage(socket, damage);
+    });
 
     // Cuando un jugador desconecta
     socket.on('disconnect', () => {
@@ -109,15 +90,17 @@ io.on('connection', (socket) => {
                 const playerName = room[index].name;
 
                 // Eliminar del objeto de jugadores y de la sala
-                delete players[socket.id];
                 room.splice(index, 1);
                 rooms[roomId] = room;
 
                 // Notificar a los demás jugadores
                 io.to(roomId).emit('message', `${playerName} se ha desconectado`);
-                io.to(roomId).emit('playersList', room.map(player => formatPlayerData(player.id)));
+                io.to(roomId).emit('playersList', room.map(player => playerController.formatPlayerData(player.id)));
             }
         }
+
+        // Eliminar al jugador
+        playerController.removePlayer(socket);
     });
 });
 
