@@ -61,7 +61,8 @@ function setupSocketListeners() {
             typeof playerData.position.x === 'number' &&
             typeof playerData.position.y === 'number' &&
             typeof playerData.position.z === 'number' &&
-            playerData.animation // Verifica que haya una animación
+            playerData.animation &&
+            !gameScene.getPlayerById(playerData.id) // Verifica que haya una animación
         ) {
             console.log('Nuevo jugador conectado:', playerData);
             gameScene.addPlayer(playerData);
