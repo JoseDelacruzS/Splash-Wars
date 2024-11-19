@@ -68,8 +68,6 @@ function setupSocketListeners() {
         }
     });
     
-    
-    
     socket.on('updatePosition', (position) => {
         if (players[socket.id]) {
             players[socket.id].position = position || { x: 0, y: 0, z: 0 }; // Agregar validación
@@ -85,7 +83,6 @@ function setupSocketListeners() {
         }
     });
     
-
     // Evento de inicio del juego
     socket.on('gameStarted', () => {
         console.log('El juego ha comenzado');
@@ -121,20 +118,10 @@ function setupSocketListeners() {
         console.log(message);
     });
 
-    socket.on('addPlayer', (playerData) => {
-        // Verificar que los datos del jugador sean válidos
-        if (playerData && playerData.x && playerData.y && playerData.z) {
-            this.gameScene.addPlayer(playerData);
-        }
-    });
-
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
         console.log('Jugadores en la sala:', players);
         players.forEach((player) => {
-            if (!gameScene.getPlayerById(player.id)) {
-                gameScene.addPlayer(player); // Agrega al jugador si no existe
-            }
         });
     });
 
@@ -158,8 +145,6 @@ function setupSocketListeners() {
                         playerData.position.y,
                         playerData.position.z
                     );
-                } else {
-                    gameScene.addPlayer(playerData); // Agregar nuevo jugador si no existe
                 }
             }
         });
