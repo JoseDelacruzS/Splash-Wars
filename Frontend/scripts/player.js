@@ -27,7 +27,6 @@ export class Player {
         this.velocityY = 10;
         this.jumpHeight = 100;
 
-        this.loadModel();
         this.setupKeyboardControls();
         this.setupMouseControls();
     }
@@ -48,7 +47,7 @@ export class Player {
                 this.loadAnimations();
                 this.scene.add(this.model);
                 this.updateCameraPosition();
-                
+
             },
             (xhr) => {
                 console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
