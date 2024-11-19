@@ -174,6 +174,12 @@ export class Player {
             }
         }
 
+        socket.emit('updatePosition', {
+            x: this.model.position.x,
+            y: this.model.position.y,
+            z: this.model.position.z,
+        });
+
         if (this.animations) {
             this.animations.update(deltaTime);
         }
