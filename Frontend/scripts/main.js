@@ -49,9 +49,9 @@ function setupSocketListeners() {
     // Confirmar conexión
     socket.on('connect', () => {
         console.log('Conectado al servidor con ID:', socket.id);
-        localPlayerId = socket.id;
+        localPlayerId = socket.id; 
     });
-
+    
     // Evento de inicio del juego
     socket.on('gameStarted', () => {
         console.log('El juego ha comenzado');
@@ -93,7 +93,7 @@ function setupSocketListeners() {
             console.warn('El jugador local ya está inicializado:', playerData.id);
             return;
         }
-
+    
         // Verificar que no exista ya en la escena
         if (!gameScene.getPlayerById(playerData.id)) {
             gameScene.addPlayer(playerData);
@@ -113,22 +113,10 @@ function setupSocketListeners() {
     });
 
     // main.js
-    // Escuchar actualizaciones de posición y animación para los jugadores
-    socket.on('playerPositionUpdated', (playerData) => {
-        const player = this.getPlayerById(playerData.id);
-
+    socket.on('playerPositionUpdated', ({ id, position }) => {
+        const player = gameScene.getPlayerById(id); // Debes implementar getPlayerById en GameScene
         if (player) {
-            player.updatePosition(playerData.position);
-            player.model.rotation.set(0, playerData.rotationY || 0, 0);
-
-            // Actualizar animación
-            if (playerData.isJumping) {
-                player.animations.play('jump');
-            } else if (playerData.velocityLength > 0) {
-                player.animations.play('run');
-            } else {
-                player.animations.play('idle');
-            }
+            player.updatePosition(position); // Actualiza la posición del jugador
         }
     });
 
@@ -150,8 +138,8 @@ function setupSocketListeners() {
             }
         });
     });
-
-    socket.on('updatePosition', (data) => {
+    
+        socket.on('updatePosition', (data) => {
         const { id, position } = data;
         if (players[id]) {
             players[id].position = position;
@@ -164,8 +152,8 @@ function setupSocketListeners() {
         if (player) {
             gameScene.removePlayer(playerId); // Implementa esta función en `scene.js`
         }
-    });
-
+    });    
+    
 }
 
 // Actualizar HUD

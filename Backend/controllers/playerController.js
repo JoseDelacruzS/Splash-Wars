@@ -22,30 +22,20 @@ playerController.initPlayer = (socket, name) => {
     return playerController.formatPlayerData(socket.id);
 };
 
-// Actualiza la posición y animación del jugador
+// Actualiza la posición del jugador
 playerController.updatePosition = (socket, position, io, rooms) => {
     if (players[socket.id]) {
         players[socket.id].position = position;
-
-        // Aquí asumes que tienes las animaciones y la rotación (puedes adaptarlo a tu lógica)
-        const playerData = {
-            id: socket.id,
-            position: players[socket.id].position,
-            rotationY: players[socket.id].rotationY,  // Aquí pasas la rotación Y
-            isJumping: players[socket.id].isJumping, // Aquí pasas el estado de salto
-            velocityLength: players[socket.id].velocity.length(), // Longitud de la velocidad (para saber si está moviéndose)
-        };
 
         const roomId = Object.keys(rooms).find((roomId) =>
             rooms[roomId].some((player) => player.id === socket.id)
         );
 
         if (roomId) {
-            io.to(roomId).emit("playerPositionUpdated", playerData);
+            io.to(roomId).emit("playerPositionUpdated", playerController.formatPlayerData(socket.id));
         }
     }
 };
-
 
 // Maneja la desconexión de un jugador
 playerController.removePlayer = (socket, io, rooms) => {
