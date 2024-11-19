@@ -108,11 +108,11 @@ export default class GameScene {
         // Asegúrate de que el modelo esté cargado antes de establecer la posición
         if (newPlayer.model) {
             newPlayer.model.position.set(playerData.position.x, playerData.position.y, playerData.position.z);
+            this.players.push(newPlayer); // Añade al array de jugadores
         } else {
             console.error("El modelo de Player no está cargado.");
         }
 
-        this.players.push(newPlayer); // Añade al array de jugadores
     }
 
     // scene.js
@@ -126,6 +126,6 @@ export default class GameScene {
             const [removedPlayer] = this.players.splice(playerIndex, 1);
             this.scene.remove(removedPlayer.model); // Elimina el modelo de la escena
         }
-    }    
+    }
 
 }
