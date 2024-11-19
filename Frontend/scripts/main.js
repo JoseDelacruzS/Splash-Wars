@@ -58,14 +58,27 @@ function setupSocketListeners() {
             playerData.position &&
             typeof playerData.position.x === 'number' &&
             typeof playerData.position.y === 'number' &&
-            typeof playerData.position.z === 'number'
+            typeof playerData.position.z === 'number' &&
+            playerData.animation // Verifica que haya una animación
         ) {
             console.log('Nuevo jugador conectado:', playerData);
+    
+            // Aquí, debes asegurarte de que gameScene.addPlayer sea capaz de manejar animaciones.
+            // Supongamos que 'animation' es una cadena que define qué animación debe usarse.
             gameScene.addPlayer(playerData);
+    
+            // Si usas Three.js, puedes asignar la animación a un esqueleto o modelo
+            const playerObject = gameScene.getPlayer(playerData.id);
+            if (playerObject) {
+                // Aquí podría ir tu lógica de animación, por ejemplo:
+                playerObject.playAnimation(playerData.animation);
+            }
+    
         } else {
             console.error('Error: Datos del nuevo jugador incompletos:', playerData);
         }
     });
+    
     
     
     socket.on('updatePosition', (position) => {
@@ -169,6 +182,14 @@ function setupSocketListeners() {
             gameScene.removePlayer(playerId); // Implementa esta función en `scene.js`
         }
     });    
+
+    socket.on('playerAnimationUpdated', (animationState) => {
+        const player = gameScene.getPlayerById(playerId); // Necesitas esta función para obtener el jugador por ID
+        if (player) {
+            player.updateAnimation(animationState); // Actualiza la animación
+        }
+    });
+    
 }
 
 // Actualizar HUD

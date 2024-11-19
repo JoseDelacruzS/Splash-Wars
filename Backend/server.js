@@ -91,6 +91,11 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('updatePlayerAnimation', (playerId, animationState) => {
+        // Emitir la animación al cliente correspondiente
+        socket.to(playerId).emit('playerAnimationUpdated', animationState);
+    });    
+
     // Cuando un jugador desconecta
     socket.on('disconnect', () => {
         console.log('Un jugador se desconectó:', socket.id);
