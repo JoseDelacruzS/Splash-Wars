@@ -45,7 +45,6 @@ io.on("connection", (socket) => {
 
             io.to(roomId).emit("message", `${playerName} se ha unido al juego`);
             io.to(roomId).emit("playersList", playerController.getPlayersInRoom(roomId, rooms));
-            socket.broadcast.to(roomId).emit("newPlayer", playerData);
         } else {
             socket.emit("message", "La sala está llena. Intenta con otra.");
         }

@@ -51,39 +51,15 @@ function setupSocketListeners() {
         console.log('Conectado al servidor con ID:', socket.id);
         localPlayerId = socket.id; 
     });
-
-    // // Evento para un nuevo jugador
-    // socket.on('newPlayer', (playerData) => {
-    //     if (
-    //         playerData &&
-    //         playerData.id &&
-    //         playerData.position &&
-    //         typeof playerData.position.x === 'number' &&
-    //         typeof playerData.position.y === 'number' &&
-    //         typeof playerData.position.z === 'number' &&
-    //         playerData.animation // Verifica que haya una animación
-    //     ) {
-    //         console.log('Nuevo jugador conectado:', playerData);
-    //         gameScene.addPlayer(playerData);
-    //     } else {
-    //         console.error('Error: Datos del nuevo jugador incompletos:', playerData);
-    //     }
-    // });
     
-    socket.on('updatePosition', (position) => {
-        if (players[socket.id]) {
-            players[socket.id].position = position || { x: 0, y: 0, z: 0 }; // Agregar validación
-            const roomId = Object.keys(rooms).find(roomId =>
-                rooms[roomId].some(player => player.id === socket.id)
-            );
-            if (roomId) {
-                socket.broadcast.to(roomId).emit('playerPositionUpdated', {
-                    id: socket.id,
-                    position: players[socket.id].position,
-                });
-            }
+    socket.on('updatePosition', (data) => {
+        const { id, position } = data;
+        if (players[id]) {
+            players[id].position = position;
+            io.to(roomId).emit('updateAllPositions', players);
         }
     });
+    
     
     // Evento de inicio del juego
     socket.on('gameStarted', () => {
