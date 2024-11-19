@@ -80,7 +80,7 @@ export class Player {
             console.warn('Intentando actualizar posición antes de cargar el modelo');
             return;
         }
-        this.position.set(position.x, position.y, position.z);
+        this.model.position.set(position.x, position.y, position.z);
     }
 
     setupKeyboardControls() {
