@@ -81,7 +81,6 @@ export class Player {
             return;
         }
         this.model.position.set(position.x, position.y, position.z);
-        this.position.set(position.x, position.y, position.z);
     }
 
     setupKeyboardControls() {
