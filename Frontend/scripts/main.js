@@ -114,10 +114,10 @@ function setupSocketListeners() {
 
     // main.js
     socket.on('playerPositionUpdated', ({ id, position }) => {
-        if (id === socket.id) {
-            // Ignorar actualizaciones de posición del propio jugador
-            return;
-        }
+            if (id === socket.id) {
+        // Ignorar actualizaciones de posición del propio jugador
+        return;
+    }
         const player = gameScene.getPlayerById(id); // Debes implementar getPlayerById en GameScene
         if (player) {
             player.updatePosition(position); // Actualiza la posición del jugador
@@ -126,10 +126,6 @@ function setupSocketListeners() {
 
     socket.on('updateAllPositions', (playersData) => {
         Object.keys(playersData).forEach((id) => {
-            if (id === socket.id) {
-                // Ignora la posición del jugador local
-                return;
-            }
             const playerData = playersData[id];
             if (id !== socket.id) { // No actualizar la posición propia
                 let player = gameScene.getPlayerById(id);
