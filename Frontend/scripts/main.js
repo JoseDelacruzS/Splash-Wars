@@ -149,10 +149,6 @@ function setupSocketListeners() {
         }
     });    
     
-    socket.on('disconnect', () => {
-        gameScene.removePlayer(socket.id);
-    });
-    
 }
 
 // Actualizar HUD
