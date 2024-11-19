@@ -13,6 +13,7 @@ export default class GameScene {
         this.hud = new HUD();
         this.map = null;
         this.players = [];
+        this.socket = socket;
 
         this.init();
         this.animate();
@@ -97,7 +98,7 @@ export default class GameScene {
         }
 
         // Evita agregar al jugador local
-        if (playerData.id === socket.id) {
+        if (playerData.id === this.socket.id) {
             console.log('Jugador local ignorado en addPlayer:', playerData.id);
             return;
         }
