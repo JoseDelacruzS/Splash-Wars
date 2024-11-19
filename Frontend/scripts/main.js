@@ -119,14 +119,11 @@ function setupSocketListeners() {
     });
 
     socket.on('addPlayer', (playerData) => {
-        // Verificar que el jugador no exista ya en la escena
-        if (!gameScene.getPlayerById(playerData.id)) {
-            gameScene.addPlayer(playerData);
-        } else {
-            console.warn("Jugador ya existente:", playerData.id);
+        // Verificar que los datos del jugador sean válidos
+        if (playerData && playerData.x && playerData.y && playerData.z) {
+            this.gameScene.addPlayer(playerData);
         }
     });
-    
 
     // Actualización de la lista de jugadores
     socket.on('playersList', (players) => {
