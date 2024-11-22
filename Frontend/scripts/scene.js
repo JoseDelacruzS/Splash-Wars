@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { HUD } from './hud.js';
 import { Map } from './map1.js';
 import { Player } from './player.js';
+import { Collectibles } from './collectibles.js';
 
 export default class GameScene {
     constructor() {
@@ -51,6 +52,14 @@ export default class GameScene {
     loadGameElements() {
         this.map = new Map(this.scene, this.camera);
         this.loadPlayer();
+
+         // Inicializar recolectables
+    this.collectibles = new Collectibles(this.scene);
+
+    // Agregar algunos recolectables como ejemplo
+    this.collectibles.createCollectible(new THREE.Vector3(5, 1, 5));
+    this.collectibles.createCollectible(new THREE.Vector3(-3, 1, 2));
+    this.collectibles.createCollectible(new THREE.Vector3(0, 1, -4));
     }
 
     loadPlayer() {
@@ -60,7 +69,7 @@ export default class GameScene {
     update() {
         const deltaTime = this.clock.getDelta();
         if (this.player) {
-            this.player.update(deltaTime);
+            this.player.update(deltaTime,this.collectibles);
         }
         if (this.map) {
             this.map.update();

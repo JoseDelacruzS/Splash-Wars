@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { PlayerAnimations } from './playerAnimations.js';
+import { Collectibles } from './collectibles.js';
+
 
 export class Player {
     constructor(scene, camera) {
@@ -10,6 +12,9 @@ export class Player {
         this.velocity = new THREE.Vector3();
         this.moveSpeed = 7;
 
+        this.boundingBox = new THREE.Box3(); // Caja de colisión para el jugador
+        this.collectedObjects = 0; // Contador de objetos recolectados
+    
         //Camara
         this.cameraOffset = new THREE.Vector3(0, 5.5, -3);
         this.cameraLookAtOffset = new THREE.Vector3(0, 4.5, 0);
@@ -126,7 +131,7 @@ export class Player {
         }
     }
 
-    update(deltaTime) {
+    update(deltaTime,collectibles) {
         if (!this.model) return;
         // Inicializamos la velocidad en 0
         this.velocity.set(0, 0, 0);
@@ -187,7 +192,28 @@ export class Player {
 
         // Actualiza la posición de la cámara
         this.updateCameraPosition();
+
+        // Actualizar la posición de la caja de colisión del jugador
+    this.boundingBox.setFromObject(this.model);
+
+    // Verificar colisiones con los recolectables
+    this.checkCollisions(collectibles);
     }
+
+    checkCollisions(collectibles) {
+        // Recorrer los recolectables
+        collectibles.getCollectibles().forEach((object) => {
+            const objectBoundingBox = new THREE.Box3().setFromObject(object);
+    
+            // Verificar intersección entre la caja del jugador y la del recolectable
+            if (this.boundingBox.intersectsBox(objectBoundingBox)) {
+                console.log("Objeto recolectado!");
+                collectibles.removeCollectible(object); // Remover el objeto recolectado
+            }
+        });
+    }
+    
+    
 
     updateCameraPosition() {
         const offsetX = Math.sin(this.yaw) * this.cameraOffset.z + Math.cos(this.yaw) * this.cameraOffset.x;

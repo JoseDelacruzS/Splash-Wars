@@ -2,6 +2,8 @@
 import * as THREE from 'three';
 import GameScene from './scene.js';
 import { HUD } from './hud.js';
+import { Collectibles } from './collectibles.js';
+
 
 // Variables de la escena
 let gameScene, hud;
