@@ -194,10 +194,10 @@ export class Player {
         this.updateCameraPosition();
 
         // Actualizar la posición de la caja de colisión del jugador
-    this.boundingBox.setFromObject(this.model);
+        this.boundingBox.setFromObject(this.model);
 
     // Verificar colisiones con los recolectables
-    this.checkCollisions(collectibles);
+        this.checkCollisions(collectibles);
     }
 
     checkCollisions(collectibles) {
